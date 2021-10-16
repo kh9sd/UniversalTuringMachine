@@ -1,0 +1,9 @@
+ideas for cool shit
+
+-turing machine
+
+-various np-hard problems solvers
+
+-conway's game of life
+
+-ascii art
