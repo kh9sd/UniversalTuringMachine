@@ -156,7 +156,7 @@ class MConfig:
         # next is the name of another m-config
 
     def __str__(self):
-        return str((self.name, self.sym, self.oper, self.next))
+        return str((self.name, self.symbol, self.operation, self.next))
 
     def get_name(self):
         return self.name
