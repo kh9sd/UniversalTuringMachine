@@ -4,6 +4,22 @@ symbol_dict = {
     2: "1"
 }
 
+
+def name_to_english(nm):
+    return "q_" + str(len(nm))
+
+
+def symbol_to_english(sym):
+    return symbol_dict[len(sym)]
+
+
+def oper_to_english(opr):
+    if opr == "" or opr[-1] == "C":
+        return symbol_to_english(opr), " "
+    else:
+        return symbol_to_english(opr[:-1]), opr[-1]
+
+
 verify_set = {"D", "A", "C", "L", "R"}
 
 
@@ -78,9 +94,9 @@ def symbol_check(chk):
 def operation_check(chk):
     if chk != "":
         if chk[-1] == "L" or chk[-1] == "R":
-            return is_all_char(chk[:-1], "C")
+            return symbol_check(chk[:-1])
         else:
-            return is_all_char(chk, "C")
+            return symbol_check(chk)
     else:
         return True
 
@@ -116,8 +132,22 @@ class MConfig:
     # ex. DADDCLDA, all ;'s already removed'
 
     def __init__(self, sd):
-        self.name, self.sym, self.oper, self.next = ("q_1", " ",
-        ("P0", "R"), "q_1")
+        if not verify(sd):
+            raise ValueError("Invalid Standard Description for m-config")
+
+        holder = []
+        for char in sd:
+            if char == "D":
+                holder.append("")
+            else:
+                holder[-1] = holder[-1] + char
+
+        self.name = name_to_english(holder[0])
+        self.symbol = symbol_to_english(holder[1])
+        self.operation = oper_to_english(holder[2])
+        self.next = name_to_english(holder[3])
+        # self.name, self.sym, self.oper, self.next = ("q_1", " ",
+        #                                                   ("P0", "R"), "q_1")
         # name is something like q_1 or q_2
         # symbol is something like 0, 1, or " "
         # operation is a tuple like ("P0", "L")
@@ -130,3 +160,12 @@ class MConfig:
 
     def get_name(self):
         return self.name
+
+    def get_symbol(self):
+        return self.symbol
+
+    def get_operation(self):
+        return self.operation
+
+    def get_next(self):
+        return self.next
