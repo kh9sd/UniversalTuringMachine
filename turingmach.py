@@ -1,4 +1,4 @@
-import pygame
+# import pygame
 
 
 # turing machine, where we are limited to 20 blocks
