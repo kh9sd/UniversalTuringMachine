@@ -6,6 +6,8 @@ input_sd = "DADDCRDA;"
 
 mconfig_dict = {}
 
+position = 0
+
 tape = Tape()
 
 for chunk in input_sd.split(";")[:-1]:  # ignore last element, will be blank
