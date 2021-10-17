@@ -111,17 +111,16 @@ def is_all_char(str, char):
             return False
     return True
 
-
-assert(verify("DADDCRDAA"))
-assert(verify("DADDCLDA"))
-assert(not verify("DA"))
-assert(not verify("ZDA"))
-assert(not verify("DADA"))
-assert(verify("DDDD"))
-assert(verify("DADCCDD"))
-assert(verify("DADCCDCLD"))
-assert(verify("DADCCDCRD"))
-assert(verify("DADCCDCD"))
+# assert(verify("DADDCRDAA"))
+# assert(verify("DADDCLDA"))
+# assert(not verify("DA"))
+# assert(not verify("ZDA"))
+# assert(not verify("DADA"))
+# assert(verify("DDDD"))
+# assert(verify("DADCCDD"))
+# assert(verify("DADCCDCLD"))
+# assert(verify("DADCCDCRD"))
+# assert(verify("DADCCDCD"))
 
 
 class MConfig:
