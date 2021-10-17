@@ -158,14 +158,14 @@ class MConfig:
     def __str__(self):
         return str((self.name, self.symbol, self.operation, self.next))
 
-    def get_name(self):
-        return self.name
-
-    def get_symbol(self):
-        return self.symbol
-
-    def get_operation(self):
-        return self.operation
-
-    def get_next(self):
-        return self.next
+    # def get_name(self):
+    #     return self.name
+    #
+    # def get_symbol(self):
+    #     return self.symbol
+    #
+    # def get_operation(self):
+    #     return self.operation
+    #
+    # def get_next(self):
+    #     return self.next
