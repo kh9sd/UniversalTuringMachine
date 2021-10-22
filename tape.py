@@ -21,8 +21,9 @@ class Tape:
     also holds the current square on the tape, also in the spirit of Turing!
     """
     def __init__(self):
-        self.head = TapeSquare()
-        self.current = self.head
+        # self.head = TapeSquare()
+        # self.current = self.head
+        self.current = TapeSquare()
 
     def get_symbol(self):
         return self.current.data
@@ -48,19 +49,23 @@ class Tape:
 
     def __str__(self):
         # inefficient due to string immut, change later
-        to_right = ""
+        to_right = []
         cur = self.current.next
         while cur is not None:
-            to_right += f"[{cur.data}]"
+            to_right.append(f"[{cur.data}]")
             cur = cur.next
 
-        to_left = ""
+        to_left = []
         cur = self.current.previous
         while cur is not None:
-            to_left = f"[{cur.data}]" + to_left
+            to_left.append(f"[{cur.data}]")
             cur = cur.previous
 
-        return (to_left +
+        right_str = "".join(to_right)
+        left_str = "".join(to_left[::-1])
+
+        return (left_str +
                 "\033[4m" +
                 f"[{self.current.data}]" +
-                "\033[0m" + to_right)
+                "\033[0m" +
+                right_str)
