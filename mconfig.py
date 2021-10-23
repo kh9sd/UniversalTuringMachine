@@ -18,7 +18,7 @@ def name_to_english(nm):
         int is determined by the length of the passed A's chain
 
     nm: string
-        a string of pure A's (ex. "AAAAAA" or "")
+        a string of pure A's (ex. "AAAAAA" or "") help
     """
 
     return "q_" + str(len(nm))
