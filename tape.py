@@ -1,9 +1,19 @@
 class TapeSquare:
     """
-    represents a square on the tape of a Turing machine
-    basically a list node
+    represents a single square on the tape of a Turing machine
+    basically implemented as a linked list node
     """
+
     def __init__(self, prev=None, next=None, data=" "):
+        """
+        previous : another TapeSuare
+            reference to the next TS to the left
+        next: another TapeSquare
+            reference to the next TS to the right
+        data: string
+            symbol stored on the TSquare
+        """
+
         self.previous = prev
         self.next = next
         self.data = data
@@ -16,41 +26,99 @@ class TapeSquare:
 
 class Tape:
     """
-    represents a tape object
-    essentially a neutered doubly-linked list, in the spirit of Turing!
-    also holds the current square on the tape, also in the spirit of Turing!
+    represents a Tape object
+
+    This is essentially a neutered doubly-linked list, in the spirit of Turing!
+    It also holds the current square on the tape, also in the spirit of Turing!
     """
+
     def __init__(self):
-        # self.head = TapeSquare()
-        # self.current = self.head
+        """
+        initializes a totally blank tape
+
+        current: TapeSquare
+            holds the current TapeSquare the TM is processing
+        """
+
         self.current = TapeSquare()
 
     def get_symbol(self):
+        """
+        getter method for symbol on current TapeSquare
+        purely for typing convenience
+        """
+
         return self.current.data
 
     def set_symbol(self, sym):
+        """
+        setter method for symbol on current TapeSquare
+        purely for typing convenience
+        """
+
         self.current.data = sym
 
     def add_left(self, parent):
+        """
+        adds a new TapeSquare to the left of the passed square
+        can assume that this is also the leftmost square
+
+        parent: TapeSquare we are attaching this new TS to on the left
+        """
+
         return TapeSquare(next=parent)
 
     def add_right(self, parent):
+        """
+        adds a new TapeSquare to the right of the passed square
+        can assume that this is also the rightmost square
+
+        parent: TapeSquare we are attaching this new TS to on the right
+        """
+
         return TapeSquare(prev=parent)
 
     def move_left(self):
+        """
+        moves the current TapeSquare left one square
+        also handles if this is the leftmost square
+        """
+
         if self.current.previous is None:
             self.current.previous = self.add_left(self.current)
         self.current = self.current.previous
 
     def move_right(self):
+        """
+        moves the current TapeSquare right one square
+        also handles if this is the rightmost square
+        """
+
         if self.current.next is None:
             self.current.next = self.add_right(self.current)
         self.current = self.current.next
 
     def square_check(self, sym):
+        """
+        checks if current square symbol is same as passed symbol
+
+        returns a Boolean
+
+        symbol: string
+            symbol we are checking
+        """
+
         return self.current.data == sym
 
     def move(self, instruct):
+        """
+        moves the current square according to instruction passed
+
+        instruct: string
+            either "L", "R", or ""
+            will move left, right, or not at all accordingly
+        """
+
         if instruct == "":
             pass
         elif instruct == "L":
@@ -61,7 +129,11 @@ class Tape:
             raise RuntimeError('Movement command is not " ", "L", or "R"')
 
     def __str__(self):
-        # inefficient due to string immut, change later
+        """
+        creates string presentation of entire Tape
+        current square is indictated by underline under symbol
+        """
+
         to_right = []
         cur = self.current.next
         while cur is not None:
