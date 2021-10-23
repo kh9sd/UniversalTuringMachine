@@ -130,7 +130,7 @@ class Tape:
 
     def __str__(self):
         """
-        creates string presentation of entire Tape
+        creates and returns string presentation of entire Tape
         current square is indictated by underline under symbol
         """
 

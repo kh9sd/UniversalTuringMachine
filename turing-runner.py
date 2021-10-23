@@ -1,4 +1,5 @@
 # main event loop for turing machine
+# TODO: can I put this entirely into the tape.py?
 import time
 from mconfig import MConfig
 from tape import Tape
