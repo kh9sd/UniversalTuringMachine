@@ -95,40 +95,6 @@ def verify(sd):
     else:
         return False
 
-    # if letter_set.issubset(verify_set):  # initial check for correct letters
-    #     chunks = sd.split("D")
-    #     # print(chunks)
-    #
-    #     if len(chunks) != 5:
-    #         print("wrong number of D's")
-    #         return
-    #
-    #     if chunks[0] != "":
-    #         print("SD must start with D")
-    #         return
-    #
-    #     if name_check(chunks[1]):
-    #         if symbol_check(chunks[2]):
-    #             if operation_check(chunks[3]):
-    #                 if next_check(chunks[4]):
-    #                     print("passed!")
-    #                     return
-    #                 else:
-    #                     print("SD check failed")
-    #                     return
-    #             else:
-    #                 print("operation check failed")
-    #                 return
-    #         else:
-    #             print("symbol check failed")
-    #             return
-    #     else:
-    #         print("SD name check failed")
-    #         return
-    # else:
-    #     print("wrong letters")
-    #     return
-
 
 def name_check(chk):
     """
