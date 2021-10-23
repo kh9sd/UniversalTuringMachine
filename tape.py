@@ -47,6 +47,19 @@ class Tape:
             self.current.next = self.add_right(self.current)
         self.current = self.current.next
 
+    def square_check(self, sym):
+        return self.current.data == sym
+
+    def move(self, instruct):
+        if instruct == "":
+            pass
+        elif instruct == "L":
+            self.move_left()
+        elif instruct == "R":
+            self.move_right()
+        else:
+            raise RuntimeError('Movement command is not " ", "L", or "R"')
+
     def __str__(self):
         # inefficient due to string immut, change later
         to_right = []
