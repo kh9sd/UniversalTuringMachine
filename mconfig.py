@@ -15,9 +15,9 @@ def symbol_to_english(sym):
 
 def oper_to_english(opr):
     if opr == "" or opr[-1] == "C":
-        return symbol_to_english(opr), ""
+        return "P" + symbol_to_english(opr), ""
     else:
-        return symbol_to_english(opr[:-1]), opr[-1]
+        return "P" + symbol_to_english(opr[:-1]), opr[-1]
 
 
 verify_set = {"D", "A", "C", "L", "R"}
