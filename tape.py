@@ -115,18 +115,18 @@ class Tape:
         moves the current square according to instruction passed
 
         instruct: string
-            either "L", "R", or ""
+            either "L", "R", or "N"
             will move left, right, or not at all accordingly
         """
 
-        if instruct == "":
+        if instruct == "N":
             pass
         elif instruct == "L":
             self.move_left()
         elif instruct == "R":
             self.move_right()
         else:
-            raise RuntimeError('Movement command is not " ", "L", or "R"')
+            raise RuntimeError('Movement command is not "N", "L", or "R"')
 
     def __str__(self):
         """
