@@ -39,29 +39,26 @@ def symbol_to_english(sym):
 
 def oper_to_english(opr):
     """
-    makes a string representation of chain of C's possibly
-    capped by a L or R from the SD
+    makes a string representation of chain of C's
+    capped by a L, R, or N from the SD
 
     returns a tuple formatted as
     ("P{symbol}"", move)
         where symbol is a symbol from the symbol_dict
-        and move is a string, one of "L", "R", or ""
+        and move is a string, one of "L", "R", or "N"
 
     opr: string
-        chain of C's with a possible ending of L or R
-        (ex. "CCCC" or "" or "L" "CR")
+        chain of C's with a ending of L, R, or N
+        (ex. "CCCCN" or "R" or "L" "CR")
     """
 
-    if opr == "" or opr[-1] == "C":
-        return "P" + symbol_to_english(opr), ""
-    else:
-        return "P" + symbol_to_english(opr[:-1]), opr[-1]
+    return "P" + symbol_to_english(opr[:-1]), opr[-1]
 
 
 """
 holds set of possible letters in SD
 """
-verify_set = {"D", "A", "C", "L", "R"}
+verify_set = {"D", "A", "C", "L", "R", "N"}
 
 
 def verify(sd):
@@ -73,11 +70,11 @@ def verify(sd):
 
     sd: string
         is valid as a Standard Description if
-            only includes letters D,A,C,L,R
+            only includes letters D,A,C,L,R,N
             must start with D followed by some A's
             must then have another D followed by some C's
             must then have another D followed by some C's
-                only this chain of C's can be followed with a single L or R
+                must be followed with a single L, R, or N
             must have another D followed by some A's
     """
 
@@ -124,8 +121,7 @@ def symbol_check(chk):
 
 def operation_check(chk):
     """
-    checks if passed string from SD is all C's, a slight exception if
-    last char is L or R and rest is all C's
+    checks if passed string from SD is all C's, followed by either L, R, or N
 
     returns Boolean
 
@@ -134,12 +130,9 @@ def operation_check(chk):
     """
 
     if chk != "":
-        if chk[-1] == "L" or chk[-1] == "R":
+        if chk[-1] == "L" or chk[-1] == "R" or chk[-1] == "N":
             return symbol_check(chk[:-1])
-        else:
-            return symbol_check(chk)
-    else:
-        return True
+    return False
 
 
 def next_check(chk):
@@ -172,17 +165,6 @@ def is_all_char(str, char):
             return False
     return True
 
-# assert(verify("DADDCRDAA"))
-# assert(verify("DADDCLDA"))
-# assert(not verify("DA"))
-# assert(not verify("ZDA"))
-# assert(not verify("DADA"))
-# assert(verify("DDDD"))
-# assert(verify("DADCCDD"))
-# assert(verify("DADCCDCLD"))
-# assert(verify("DADCCDCRD"))
-# assert(verify("DADCCDCD"))
-
 
 class MConfig:
     """
@@ -211,7 +193,7 @@ class MConfig:
 
         operation: tuple (string, string)
             first str formatted like "P{symbol}"
-            second str is either "L", "R", or ""
+            second str is either "L", "R", or "N"
 
         next: string
             name of the next M-Config
