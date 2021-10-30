@@ -119,18 +119,18 @@ class Tape:
         moves the current square according to instruction passed
 
         instruct: string
-            either "L", "R", or ""
+            either "L", "R", or "N"
             will move left, right, or not at all accordingly
         """
 
-        if instruct == "":
+        if instruct == "N":
             pass
         elif instruct == "L":
             self.move_left()
         elif instruct == "R":
             self.move_right()
         else:
-            raise RuntimeError('Movement command is not " ", "L", or "R"')
+            raise RuntimeError('Movement command is not "N", "L", or "R"')
 
     def __str__(self):
         """
@@ -165,21 +165,84 @@ def display_mconfig_dict(m_dict):
         print("{}: {}".format(mcon, mconfig_dict[mcon]))
 
 
-input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
-mconfig_dict = {}
+def process_description_num(dn):
+    """
+    creates and returns a dict of m-configs from a description number
 
-# initialization, add mconfigs to dict
-for chunk in input_sd.split(";")[:-1]:  # ignore last element, will be blank
-    mconfig = MConfig(chunk)
-    mconfig_dict[mconfig.name] = mconfig
+    dn: natural number
+        number made up of digits 1-7
+        conversion to standard description by
+        'A' by 1,
+        'C' by 2,
+        'D' by 3,
+        'L' by 4,
+        'R' by 5,
+        'N' by 6,
+        ';' by 7
+    """
+    dn_convert = {
+        "1": "A",
+        "2": "C",
+        "3": "D",
+        "4": "L",
+        "5": "R",
+        "6": "N",
+        "7": ";"
+    }
+
+    dn = str(dn)
+    holder = []
+
+    for num in dn:
+        holder.append(dn_convert[num])
+    return process_standard_des("".join(holder))
+
+
+def process_standard_des(sd):
+    """
+    creates and returns a dict of m-configs from a standard description
+
+    sd: string
+        made up of "D", "A", "C", "L", "R", "N", and ";", represents a TM
+    """
+
+    dict = {}
+
+    for chunk in sd.split(";")[:-1]:  # ignore last element, will be blank
+        mcon = MConfig(chunk)
+        if mcon.name not in dict:
+            dict[mcon.name] = mcon
+        else:
+            raise ValueError("Duplicate m-config name")
+
+    return dict
+
+
+# example SDs and DNs
+# DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
+#    31332531173113353111731113322531111731111335317
+# DADDLDA;  prints blanks to the left
+#    31334317
+# DADDCLDA;  prints 0's to the left
+#    313324317
+# DADDCRDA;  prints 0's to the right
+#    313325317
+# DADDCCRDA; prints 1's to the right
+#    3133225317
+
+input_sd = 31332531173113353111731113322531111731111335317
+
+if isinstance(input_sd, str):
+    mconfig_dict = process_standard_des(input_sd)
+elif isinstance(input_sd, int):
+    mconfig_dict = process_description_num(input_sd)
+else:
+    raise TypeError("Input is not an int or str for DN or SD processing")
 
 # display_mconfig_dict(mconfig_dict)
 
 current_mcon = mconfig_dict["q_1"]
-# print_com, move_com = current_mcon.operation
-# print(print_com)
 
-# print(print_com[1:])
 tape = Tape()
 while True:
     if tape.square_check(current_mcon.symbol):
@@ -193,4 +256,4 @@ while True:
         current_mcon = mconfig_dict[current_mcon.next]
     else:
         raise RuntimeError("Tape's symbol doesn't match mconfig's")
-    time.sleep(0.5)
+    time.sleep(0.75)
