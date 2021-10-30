@@ -20,7 +20,7 @@ for chunk in input_sd.split(";")[:-1]:  # ignore last element, will be blank
 
 # display_mconfig_dict(mconfig_dict)
 
-current_mcon = mconfig_dict["q_3"]
+current_mcon = mconfig_dict["q_1"]
 
 tape = Tape()
 while True:
