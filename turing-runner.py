@@ -21,10 +21,7 @@ for chunk in input_sd.split(";")[:-1]:  # ignore last element, will be blank
 # display_mconfig_dict(mconfig_dict)
 
 current_mcon = mconfig_dict["q_3"]
-# print_com, move_com = current_mcon.operation
-# print(print_com)
 
-# print(print_com[1:])
 tape = Tape()
 while True:
     if tape.square_check(current_mcon.symbol):
