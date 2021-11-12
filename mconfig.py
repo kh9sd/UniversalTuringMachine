@@ -95,7 +95,8 @@ def verify(sd):
 
 def name_check(chk):
     """
-    checks if passed string from SD is all A's
+    checks if passed string from SD is a valid name_check
+    must all A's, must be at least one
 
     returns Boolean
 
@@ -103,7 +104,7 @@ def name_check(chk):
         string that we're checking
     """
 
-    return is_all_char(chk, "A")
+    return is_all_char(chk, "A") and len(chk) > 0
 
 
 def symbol_check(chk):
@@ -137,7 +138,7 @@ def operation_check(chk):
 
 def next_check(chk):
     """
-    checks if passed string from SD is all A's
+    checks if passed string from SD is a valid name for the next m-config
 
     returns Boolean
 
@@ -145,7 +146,7 @@ def next_check(chk):
         string that we're checking
     """
 
-    return is_all_char(chk, "A")
+    return name_check(chk)
 
 
 def is_all_char(str, char):
