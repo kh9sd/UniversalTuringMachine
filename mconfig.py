@@ -66,6 +66,9 @@ def verify(sd):
     verifies whether a string passed is a valid Standard Description (SD)
         note: we've split the ;'s beforehand, so we dont check for them
 
+    this does not guarantee that a set of m-configs will run nicely at all
+    (hah halting problem), just whether the inputs are well-behaved
+
     returns Boolean
 
     sd: string
