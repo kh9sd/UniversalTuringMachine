@@ -218,6 +218,7 @@ def process_standard_des(sd):
     return dict
 
 
+# main method
 # example SDs and DNs
 # DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
 #    31332531173113353111731113322531111731111335317
@@ -229,8 +230,10 @@ def process_standard_des(sd):
 #    313325317
 # DADDCCRDA; prints 1's to the right
 #    3133225317
+# DADDCNDAA;DAADCDCNDA;
+# purposefully erroring TM
 
-input_sd = 31332531173113353111731113322531111731111335317
+input_sd = "DAADDCNDAA;DAAADCCDCNDA;"
 
 if isinstance(input_sd, str):
     mconfig_dict = process_standard_des(input_sd)
@@ -240,20 +243,30 @@ else:
     raise TypeError("Input is not an int or str for DN or SD processing")
 
 # display_mconfig_dict(mconfig_dict)
-
-current_mcon = mconfig_dict["q_1"]
+try:
+    current_mcon = mconfig_dict["q_1"]
+except KeyError:
+    print("No intital (q_1) m-config to start!")
+    quit()
 
 tape = Tape()
+
 while True:
-    if tape.square_check(current_mcon.symbol):
-        print_com, move_com = current_mcon.operation
-        tape.set_symbol(print_com[1:])
-        tape.move(move_com)
+    try:
+        if tape.square_check(current_mcon.symbol):
+            print_com, move_com = current_mcon.operation
+            tape.set_symbol(print_com[1:])
+            tape.move(move_com)
 
-        print(f"Current m-config: {current_mcon.name}")
-        print(tape)
+            print(f"Current m-config: {current_mcon.name}")
+            print(tape)
 
-        current_mcon = mconfig_dict[current_mcon.next]
-    else:
-        raise RuntimeError("Tape's symbol doesn't match mconfig's")
-    time.sleep(0.75)
+            current_mcon = mconfig_dict[current_mcon.next]
+        else:
+            print("This TM halted because a failed symbol check!")
+            break
+        time.sleep(0.75)
+
+    except KeyError:
+        print("This TM halted because of missing m-configs!")
+        break
