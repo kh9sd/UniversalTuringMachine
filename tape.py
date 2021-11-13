@@ -208,12 +208,21 @@ def process_standard_des(sd):
 
     dict = {}
 
-    for chunk in sd.split(";")[:-1]:  # ignore last element, will be blank
+    chunks = sd.split(";")
+
+    if chunks[-1] != "":
+        # raise ValueError("Failed parse, input doesn't end with ';' or 7")
+        print("Failed parse, input doesn't end with ';' or 7")
+        quit()
+
+    for chunk in chunks[:-1]:  # ignore last element, will be blank
         mcon = MConfig(chunk)
         if mcon.name not in dict:
             dict[mcon.name] = mcon
         else:
-            raise ValueError("Duplicate m-config name")
+            # raise ValueError("Duplicate m-config name")
+            print("Failed m-config logging, duplicate m-config names")
+            quit()
 
     return dict
 
@@ -233,7 +242,7 @@ def process_standard_des(sd):
 # DADDCNDAA;DAADCDCNDA;
 # purposefully erroring TM
 
-input_sd = "DAADDCNDAA;DAAADCCDCNDA;"
+input_sd = "DAADDCNDAA;DAAADCCDCNDA"
 
 if isinstance(input_sd, str):
     mconfig_dict = process_standard_des(input_sd)
