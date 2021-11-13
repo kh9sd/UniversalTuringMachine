@@ -33,12 +33,12 @@ def process_description_num(dn):
         "7": ";"
     }
 
-    dn = str(dn)
-    holder = []
+    stringed_dn = str(dn)
 
-    for num in dn:
-        holder.append(dn_convert[num])
-    return process_standard_des("".join(holder))
+    for num_key in dn_convert:
+        stringed_dn = stringed_dn.replace(num_key, dn_convert[num_key])
+
+    return process_standard_des(stringed_dn)
 
 
 def process_standard_des(sd):
@@ -140,7 +140,7 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
+input_sd = 31332531173113353111731113322531111731111335317
 
 mcons = master_process(input_sd)
 
