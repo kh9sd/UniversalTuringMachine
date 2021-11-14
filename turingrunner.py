@@ -146,7 +146,6 @@ input_sd = "DADDCNDAAA;DAADCDCNDA;"
 
 mcons = master_process(input_sd)
 
-# TODO: ADD EXCEPTION HANDLING FOR HALTING
 try:
     run_tm(mcons)
 except ValueError as e:
