@@ -107,8 +107,7 @@ def run_tm(mdict, tp=Tape()):
     try:
         current_mcon = mdict["q_1"]
     except KeyError:
-        print("No intital (q_1) m-config to start!")
-        quit()
+        raise KeyError("no intital (q_1) m-config to start")
 
     while True:
         if tape.square_check(current_mcon.symbol):
@@ -119,9 +118,12 @@ def run_tm(mdict, tp=Tape()):
             print(f"Current m-config: {current_mcon.name}")
             print(tape)
 
-            current_mcon = mdict[current_mcon.next]
+            try:
+                current_mcon = mdict[current_mcon.next]
+            except KeyError:
+                raise KeyError("missing m-config")
         else:
-            raise ValueError("This TM halted because a failed symbol check!")
+            raise ValueError("failed symbol check")
 
         time.sleep(0.75)
 
@@ -140,9 +142,14 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-input_sd = 31332531173113353111731113322531111731111335317
+input_sd = "DADDCNDAAA;DAADCDCNDA;"
 
 mcons = master_process(input_sd)
 
 # TODO: ADD EXCEPTION HANDLING FOR HALTING
-run_tm(mcons)
+try:
+    run_tm(mcons)
+except ValueError as e:
+    print("\nThis TM halted!\nReason:", e)
+except KeyError as e:
+    print("\nThis TM halted!\nReason:", e)
