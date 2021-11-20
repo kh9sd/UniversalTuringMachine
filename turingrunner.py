@@ -57,19 +57,15 @@ def process_standard_des(sd):
     chunks = sd.split(";")
 
     if chunks[-1] != "":
-        # raise ValueError("Failed parse, input doesn't end with ';' or 7")
-        print("Failed parse, input doesn't end with ';' or 7")
-        quit()
+        raise ValueError("Failed parse, input doesn't end with ';' or 7")
 
     for chunk in chunks[:-1]:  # ignore last element, will be blank
         mcon = MConfig(chunk)
         if (mcon.name, mcon.symbol) not in dict:
             dict[(mcon.name, mcon.symbol)] = mcon
         else:
-            # raise ValueError("Duplicate m-config name")
-            print("Failed m-config log, duplicate m-config names and symbol")
-            quit()
-
+            raise ValueError("Failed m-config log, "
+                             "duplicate m-config names and symbol")
     return dict
 
 
@@ -88,7 +84,7 @@ def master_process(in_sd):
         else:
             return process_standard_des(in_sd)
     else:
-        raise TypeError("Input is not an int or str for DN or SD processing")
+        raise TypeError("Input is not a str for DN or SD processing")
 
 
 def run_tm(mdict, tp=Tape()):
@@ -167,11 +163,18 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-input_sd = "DADDCNDAA;DAADCDCNDA;"
+# if __name__ == "__main__":
+# input_sd = input("Enter your TM as a DN or SD: ")
+input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
 
-mcons = master_process(input_sd)
+try:
+    mcons = master_process(input_sd)
+except ValueError as e:
+    print("\nInvalid input for TM:\n", e)
+    quit()
 
 try:
     run_tm(mcons)
 except KeyError as e:
     print("\nThis TM halted!\nReason:", e)
+    quit()
