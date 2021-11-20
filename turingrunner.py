@@ -12,18 +12,18 @@ def process_description_num(dn):
     """
     creates and returns a dict of m-configs from a description number
 
-    dn: natural number
-        number made up of digits 1-7
+    dn: string
+        made up of numeric digits 1-7
         conversion to standard description by
-        'A' by 1,
-        'C' by 2,
-        'D' by 3,
-        'L' by 4,
-        'R' by 5,
-        'N' by 6,
-        ';' by 7
+        'A' by '1',
+        'C' by '2',
+        'D' by '3',
+        'L' by '4',
+        'R' by '5',
+        'N' by '6',
+        ';' by '7'
     """
-    dn_convert = {
+    dn_convert_dict = {
         "1": "A",
         "2": "C",
         "3": "D",
@@ -33,12 +33,10 @@ def process_description_num(dn):
         "7": ";"
     }
 
-    stringed_dn = str(dn)
+    for num_key in dn_convert_dict:
+        dn = dn.replace(num_key, dn_convert_dict[num_key])
 
-    for num_key in dn_convert:
-        stringed_dn = stringed_dn.replace(num_key, dn_convert[num_key])
-
-    return process_standard_des(stringed_dn)
+    return process_standard_des(dn)
 
 
 def process_standard_des(sd):
@@ -80,9 +78,10 @@ def master_process(in_sd):
     """
 
     if isinstance(in_sd, str):
-        return process_standard_des(in_sd)
-    elif isinstance(in_sd, int):
-        return process_description_num(in_sd)
+        if in_sd.isnumeric():
+            return process_description_num(in_sd)
+        else:
+            return process_standard_des(in_sd)
     else:
         raise TypeError("Input is not an int or str for DN or SD processing")
 
@@ -142,7 +141,7 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-input_sd = "DADDCNDAAA;DAADCDCNDA;"
+input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
 
 mcons = master_process(input_sd)
 
