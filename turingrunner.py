@@ -4,6 +4,11 @@ from tape import Tape
 
 
 def display_mconfig_dict(m_dict):
+    """
+    for debug purposes, prints the m-configs in a dict
+
+    m_dict: dictionary of m-configs
+    """
     for mcon in m_dict:
         print("{}: {}".format(mcon, m_dict[mcon]))
 
@@ -58,11 +63,11 @@ def process_standard_des(sd):
 
     for chunk in chunks[:-1]:  # ignore last element, will be blank
         mcon = MConfig(chunk)
-        if mcon.name not in dict:
-            dict[mcon.name] = mcon
+        if (mcon.name, mcon.symbol) not in dict:
+            dict[(mcon.name, mcon.symbol)] = mcon
         else:
             # raise ValueError("Duplicate m-config name")
-            print("Failed m-config logging, duplicate m-config names")
+            print("Failed m-config log, duplicate m-config names and symbol")
             quit()
 
     return dict
@@ -103,10 +108,31 @@ def run_tm(mdict, tp=Tape()):
 
     tape = tp
 
+    # intitalizer for loop, only thing that matters is the q_1 next
+    current_mcon = MConfig("DADDCRDA")
+
+    while True:
+        try:
+            current_mcon = mdict[(current_mcon.next, tape.get_symbol())]
+        except KeyError:
+            raise KeyError("Failed transition, no match "
+                           "for given m-config and symbol!: "
+                           f"{current_mcon.next} and  {tape.get_symbol()}")
+
+        print_com, move_com = current_mcon.operation
+        tape.set_symbol(print_com[1:])
+        tape.move(move_com)
+
+        print(f"Current m-config: {current_mcon.name}")
+        print(tape)
+
+        time.sleep(0.75)
+
+    """
     try:
-        current_mcon = mdict["q_1"]
+        current_mcon = mdict["q_1", tape.get_symbol()]
     except KeyError:
-        raise KeyError("no intital (q_1) m-config to start")
+        raise KeyError("No valid intital m-config to start!")
 
     while True:
         if tape.square_check(current_mcon.symbol):
@@ -124,7 +150,7 @@ def run_tm(mdict, tp=Tape()):
         else:
             raise ValueError("failed symbol check")
 
-        time.sleep(0.75)
+        time.sleep(0.75)"""
 
 # example SDs and DNs
 # DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
@@ -141,13 +167,11 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
+input_sd = "DADDCNDAA;DAADCDCNDA;"
 
 mcons = master_process(input_sd)
 
 try:
     run_tm(mcons)
-except ValueError as e:
-    print("\nThis TM halted!\nReason:", e)
 except KeyError as e:
     print("\nThis TM halted!\nReason:", e)
