@@ -124,29 +124,6 @@ def run_tm(mdict, tp=Tape()):
 
         time.sleep(0.75)
 
-    """
-    try:
-        current_mcon = mdict["q_1", tape.get_symbol()]
-    except KeyError:
-        raise KeyError("No valid intital m-config to start!")
-
-    while True:
-        if tape.square_check(current_mcon.symbol):
-            print_com, move_com = current_mcon.operation
-            tape.set_symbol(print_com[1:])
-            tape.move(move_com)
-
-            print(f"Current m-config: {current_mcon.name}")
-            print(tape)
-
-            try:
-                current_mcon = mdict[current_mcon.next]
-            except KeyError:
-                raise KeyError("missing m-config")
-        else:
-            raise ValueError("failed symbol check")
-
-        time.sleep(0.75)"""
 
 # example SDs and DNs
 # DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
