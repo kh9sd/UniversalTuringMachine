@@ -58,7 +58,7 @@ class Tape:
 
         self.current.data = sym
 
-    def add_left(self, parent):
+    def add_left(self):
         """
         adds a new TapeSquare to the left of the passed square
         can assume that this is also the leftmost square
@@ -66,9 +66,9 @@ class Tape:
         parent: TapeSquare we are attaching this new TS to on the left
         """
 
-        return TapeSquare(next=parent)
+        return TapeSquare(next=self.current)
 
-    def add_right(self, parent):
+    def add_right(self):
         """
         adds a new TapeSquare to the right of the passed square
         can assume that this is also the rightmost square
@@ -76,7 +76,7 @@ class Tape:
         parent: TapeSquare we are attaching this new TS to on the right
         """
 
-        return TapeSquare(prev=parent)
+        return TapeSquare(prev=self.current)
 
     def move_left(self):
         """
@@ -85,7 +85,7 @@ class Tape:
         """
 
         if self.current.previous is None:
-            self.current.previous = self.add_left(self.current)
+            self.current.previous = self.add_left()
         self.current = self.current.previous
 
     def move_right(self):
@@ -95,7 +95,7 @@ class Tape:
         """
 
         if self.current.next is None:
-            self.current.next = self.add_right(self.current)
+            self.current.next = self.add_right()
         self.current = self.current.next
 
     def square_check(self, sym):
