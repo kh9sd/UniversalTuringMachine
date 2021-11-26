@@ -26,7 +26,7 @@ Finally, to separate the m-configs we just have semi-colons after each one
 An example of a TM that alternates printing 1 and 0 forever is *DADDCCRDAA;DAADDCRDA;* in this format
 
 ## Description Numbers
-Technically speaking, DNs aren't very different or anymore useful compared to SDs, but it was essential for Turing original proof, so we include in rememberance.
+Technically speaking, DNs aren't very different or anymore useful compared to SDs, but it was essential for Turing's original proof, so we include in rememberance.
 
 To convert from a SD to a DN, we simply replace each letter with a number in this way
 - "A" is replaced by 1
