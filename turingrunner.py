@@ -140,18 +140,18 @@ def run_tm(mdict, tp=Tape()):
 # purposefully erroring TM
 
 
-# if __name__ == "__main__":
-# input_sd = input("Enter your TM as a DN or SD: ")
-input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
+if __name__ == "__main__":
+    input_sd = input("Enter your TM as a DN or SD: ")
+    # input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
 
-try:
-    mcons = master_process(input_sd)
-except ValueError as e:
-    print("\nInvalid input for TM:\n", e)
-    quit()
+    try:
+        mcons = master_process(input_sd)
+    except ValueError as e:
+        print("\nInvalid input for TM:\n", e)
+        quit()
 
-try:
-    run_tm(mcons)
-except KeyError as e:
-    print("\nThis TM halted!\nReason:", e)
-    quit()
+    try:
+        run_tm(mcons)
+    except KeyError as e:
+        print("\nThis TM halted!\nReason:", e)
+        quit()

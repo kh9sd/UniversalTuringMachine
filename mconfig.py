@@ -83,7 +83,7 @@ def verify(sd):
 
     letter_set = set(sd)
 
-    if(letter_set.issubset(verify_set)):
+    if letter_set.issubset(verify_set):
         chunks = sd.split("D")
 
         return ((len(chunks) == 5) and  # check right number of D's
@@ -152,20 +152,20 @@ def next_check(chk):
     return name_check(chk)
 
 
-def is_all_char(str, char):
+def is_all_char(stri, char):
     """
     checks if passed str is entirely made up of passed char
 
     returns Boolean
 
-    str: string
+    stri: string
         the string we're checking
     char: string (one char)
         the char we're checking the string against
     """
 
-    for ch in str:
-        if(ch != char):
+    for ch in stri:
+        if ch != char:
             return False
     return True
 
