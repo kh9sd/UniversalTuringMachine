@@ -6,7 +6,7 @@ class TapeSquare:
 
     def __init__(self, prev=None, next=None, data=" "):
         """
-        previous : another TapeSuare
+        previous : another TapeSquare
             reference to the next TS to the left
         next: another TapeSquare
             reference to the next TS to the right
