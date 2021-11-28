@@ -1,6 +1,7 @@
 import time
 from mconfig import MConfig
-from tape import Tape
+import tape
+Tape = tape.Tape
 
 
 def display_mconfig_dict(m_dict):
@@ -125,6 +126,110 @@ def run_tm(mdict, tp=Tape()):
         time.sleep(0.75)
 
 
+def tape_from_input(left_str, current_str, right_str, delimiter):
+    """
+    master function that calls process_tape and produce_tape
+
+    Parameters:
+        left_str: string
+        current_str: string
+        right_str: string
+        delimiter: 1 character string
+
+    Returns Tape object
+    """
+    return produce_tape(process_tape_input(left_str, delimiter),
+                        current_str,
+                        process_tape_input(right_str, delimiter))
+
+
+def process_tape_input(input_str, delimiter):
+    """
+    processes string into array of strings, with user-defined delimiter
+
+    Parameters:
+        input_str: string
+                   series of symbol separated by the delimiter that
+                   represents a tape when read
+        delimiter: 1 character string
+                   defines separation between tape squares
+
+    Returns array of strings, pre-trimmed with delimiter on both ends
+    """
+    input_list = input_str.strip(delimiter).split(delimiter)
+
+    if len(input_list) == 1 and input_list[0] == "":
+        return []
+    return input_list
+
+
+def produce_tape(left_input, current, right_input):
+    """
+    creates a Tape object, given tape to the left of the current square,
+    the current square, and the tape to the right of the current square
+
+    Parameters:
+        left_input: array of strings
+                    if no string passed from user, input is []
+        right_input: same as left_input
+        current: string
+
+    Returns new Tape object, with current square set to the inputted square
+    """
+
+    # print(f"left: {left_input} right: {right_input} current: {current}")
+
+    if left_input:
+        left_tape = Tape()
+        left_tape.set_symbol(left_input[0])
+
+        for sym in left_input[1:]:
+            left_tape.move_right()
+            left_tape.set_symbol(sym)
+    else:
+        left_tape = None
+
+    if right_input:
+        right_tape = Tape()
+        right_tape.set_symbol(right_input[-1])
+
+        for sym in right_input[-2::-1]:  # traverses string excluding last, in reverse
+            right_tape.move_left()
+            right_tape.set_symbol(sym)
+    else:
+        right_tape = None
+
+    current_tape = Tape()
+    current_tape.set_symbol(current)
+
+    if left_tape is not None:
+        tape.join_tapes(left_tape, current_tape)
+
+    if right_tape is not None:
+        tape.join_tapes(current_tape, right_tape)
+
+    # print(current_tape)
+
+    return current_tape
+
+
+def process_inputted_tape():
+    if input("Do you want to have a starting tape? Y/N\n") == "Y":
+        delimiter = input("What character will you separate your squares with?\n")
+
+        left_str = input("Input the left side of the tape before the current square\n")
+
+        current_str = input("Input the symbol on the current square\n")
+
+        right_str = input("Input the right side of the tape after the current square\n")
+
+        tp = tape_from_input(left_str, current_str, right_str, delimiter)
+        print("Your starting tape is: ", tp)
+
+        return tp
+    else:
+        return Tape()
+
 # example SDs and DNs
 # DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
 #    31332531173113353111731113322531111731111335317
@@ -141,6 +246,8 @@ def run_tm(mdict, tp=Tape()):
 
 
 if __name__ == "__main__":
+    starting_tape = process_inputted_tape()
+
     input_sd = input("Enter your TM as a DN or SD: ")
     # input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
 
@@ -151,7 +258,7 @@ if __name__ == "__main__":
         quit()
 
     try:
-        run_tm(mcons)
+        run_tm(mcons, starting_tape)
     except KeyError as e:
         print("\nThis TM halted!\nReason:", e)
         quit()
