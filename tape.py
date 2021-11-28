@@ -128,6 +128,21 @@ class Tape:
         else:
             raise RuntimeError('Movement command is not "N", "L", or "R"')
 
+    """
+    ALL THE FUNCTIONS BELOW AREN'T ESSENTIAL FOR THE TM TO WORK
+    THEY'RE THERE FOR OTHER FUNCTIONS WE WANT TO DO
+    """
+    def traverse_end(self, go_left=True):
+        holder = self.current
+        if go_left:
+            while holder.previous is not None:
+                holder = holder.previous
+        else:
+            while holder.next is not None:
+                holder = holder.next
+
+        return holder
+
     def __str__(self):
         """
         creates and returns string presentation of entire Tape
@@ -154,3 +169,22 @@ class Tape:
                 f"[{self.current.data}]" +
                 "\033[0m" +
                 right_str)
+
+
+def join_squares(left, right):
+    if left.next is not None and right.previous is not None:
+        raise AttributeError("Inputted squares aren't free on the sides")
+    else:
+        left.next = right
+        right.previous = left
+
+
+def join_tapes(left, right):
+    """
+    joins two tapes together, left and right respectively
+    NOTE: THIS FUNCTION MODIFIES THE TAPES IN-PLACE
+    """
+    rightmost_left = left.traverse_end(False)
+    leftmost_right = right.traverse_end(True)
+
+    join_squares(rightmost_left, leftmost_right)
