@@ -2,3 +2,4 @@ __pycache__/
 testturingmachine.py
 ideas.txt
 .idea/
+config.ini
