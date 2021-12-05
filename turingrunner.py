@@ -126,21 +126,76 @@ def run_tm(mdict, tp=Tape()):
         time.sleep(0.75)
 
 
-def tape_from_input(left_str, current_str, right_str, delimiter):
+def str_to_tape(input_str_arr, current_leftmost=True):
     """
-    master function that calls process_tape and produce_tape
+    process an array of strings into a Tape object or None
 
     Parameters:
-        left_str: string
-        current_str: string
-        right_str: string
-        delimiter: 1 character string
+        input_str_arr: list of strings
+            each element is a square on the tape
+        current_leftmost: Boolean
+            whether or not returned tape has either a reference to leftmost or
+            rightmost square depending on user preference
 
-    Returns Tape object
+    Returns Tape object, or None if input_str_arr is empty
+
+    Examples:
+        str_to_tape(["a", "b", "c"], current_leftmost=True) returns [a][b][c]
+        str_to_tape(["a", "b", "c"], current_leftmost=False) returns [a][b][c]
     """
-    return produce_tape(process_tape_input(left_str, delimiter),
-                        current_str,
-                        process_tape_input(right_str, delimiter))
+    if input_str_arr:
+        tp = Tape()
+
+        if current_leftmost:
+            tp.set_symbol(input_str_arr[-1])  # set initial to rightmost char, then go left
+            left_to_do = input_str_arr[-2::-1]  # traverses string excluding last, in reverse
+        else:
+            tp.set_symbol(input_str_arr[0])
+            left_to_do = input_str_arr[1:]
+
+        for sym in left_to_do:
+            if current_leftmost:
+                tp.move_left()
+            else:
+                tp.move_right()
+
+            tp.set_symbol(sym)
+
+        return tp
+    else:
+        return None
+
+
+def produce_tape(left_input, current, right_input):
+    """
+    creates a Tape object, given tape to the left of the current square,
+    the current square, and the tape to the right of the current square
+
+    Parameters:
+        left_input: array of strings
+                    if no string passed from user, input is []
+        right_input: same as left_input
+        current: string
+
+    Returns new Tape object, with current square set to the inputted square
+    """
+    # print(f"left: {left_input} right: {right_input} current: {current}")
+
+    # whether or not the current square is right or leftmost doesn't matter for these
+    left_tape = str_to_tape(left_input)
+    right_tape = str_to_tape(right_input)
+
+    current_tape = Tape()
+    current_tape.set_symbol(current)
+
+    if left_tape is not None:
+        tape.join_tapes(left_tape, current_tape)
+
+    if right_tape is not None:
+        tape.join_tapes(current_tape, right_tape)
+
+    # print(current_tape)
+    return current_tape
 
 
 def process_tape_input(input_str, delimiter):
@@ -163,59 +218,30 @@ def process_tape_input(input_str, delimiter):
     return input_list
 
 
-def produce_tape(left_input, current, right_input):
+def tape_from_input(left_str, current_str, right_str, delimiter):
     """
-    creates a Tape object, given tape to the left of the current square,
-    the current square, and the tape to the right of the current square
+    master function that calls process_tape and produce_tape
 
     Parameters:
-        left_input: array of strings
-                    if no string passed from user, input is []
-        right_input: same as left_input
-        current: string
+        left_str: string
+        current_str: string
+        right_str: string
+        delimiter: 1 character string
 
-    Returns new Tape object, with current square set to the inputted square
+    Returns Tape object
     """
-
-    # print(f"left: {left_input} right: {right_input} current: {current}")
-
-    if left_input:
-        left_tape = Tape()
-        left_tape.set_symbol(left_input[0])
-
-        for sym in left_input[1:]:
-            left_tape.move_right()
-            left_tape.set_symbol(sym)
-    else:
-        left_tape = None
-
-    if right_input:
-        right_tape = Tape()
-        right_tape.set_symbol(right_input[-1])
-
-        for sym in right_input[-2::-1]:  # traverses string excluding last, in reverse
-            right_tape.move_left()
-            right_tape.set_symbol(sym)
-    else:
-        right_tape = None
-
-    current_tape = Tape()
-    current_tape.set_symbol(current)
-
-    if left_tape is not None:
-        tape.join_tapes(left_tape, current_tape)
-
-    if right_tape is not None:
-        tape.join_tapes(current_tape, right_tape)
-
-    # print(current_tape)
-
-    return current_tape
+    return produce_tape(process_tape_input(left_str, delimiter),
+                        current_str,
+                        process_tape_input(right_str, delimiter))
 
 
 def process_inputted_tape():
     if input("Do you want to have a starting tape? Y/N\n") == "Y":
-        delimiter = input("What character will you separate your squares with?\n")
+        while True:
+            delimiter = input("What character will you separate your squares with? One character only\n")
+
+            if len(delimiter) == 1:
+                break
 
         left_str = input("Input the left side of the tape before the current square\n")
 
