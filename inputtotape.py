@@ -1,4 +1,5 @@
 import tape
+
 Tape = tape.Tape
 
 
@@ -42,36 +43,29 @@ def str_to_tape(input_str_arr, current_leftmost=True):
         return None
 
 
-def produce_tape(left_input, current, right_input):
+def join_left_cur_right(left_tape, cur_tape, right_tape):
     """
-    creates a Tape object, given tape to the left of the current square,
-    the current square, and the tape to the right of the current square
+    modifies Tape objects in place and returns reference to current TapeSquare
+    given tape to the left of the current square, the current square, and
+    tape to the right of the current square
 
     Parameters:
-        left_input: array of strings
-                    if no string passed from user, input is []
-        right_input: same as left_input
-        current: string
+        left_tape: Tape or None
+        right_tape: Tape or None
+        cur_tape: Tape
+                one square Tape
 
     Returns new Tape object, with current square set to the inputted square
     """
     # print(f"left: {left_input} right: {right_input} current: {current}")
 
-    # whether or not the current square is right or leftmost doesn't matter for these
-    left_tape = str_to_tape(left_input)
-    right_tape = str_to_tape(right_input)
-
-    current_tape = Tape()
-    current_tape.set_symbol(current)
-
     if left_tape is not None:
-        tape.join_tapes(left_tape, current_tape)
+        tape.join_tapes(left_tape, cur_tape)
 
     if right_tape is not None:
-        tape.join_tapes(current_tape, right_tape)
+        tape.join_tapes(cur_tape, right_tape)
 
-    # print(current_tape)
-    return current_tape
+    return cur_tape
 
 
 def process_tape_input(input_str, delimiter):
@@ -106,7 +100,6 @@ def master_tape(left_str, current_str, right_str, delimiter):
 
     Returns Tape object
     """
-    return produce_tape(process_tape_input(left_str, delimiter),
-                        current_str,
-                        process_tape_input(right_str, delimiter))
-
+    return join_left_cur_right(str_to_tape(process_tape_input(left_str, delimiter)),
+                                           str_to_tape([current_str]),
+                                           str_to_tape(process_tape_input(right_str, delimiter)))
