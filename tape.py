@@ -1,10 +1,15 @@
+import config
+
+symbol_dict = config.default_dict
+
+
 class TapeSquare:
     """
     represents a single square on the tape of a Turing machine
     basically implemented as a linked list node
     """
 
-    def __init__(self, prev=None, next=None, data=" "):
+    def __init__(self, prev=None, nxt=None, data=None):
         """
         previous : another TapeSquare
             reference to the next TS to the left
@@ -13,9 +18,11 @@ class TapeSquare:
         data: string
             symbol stored on the TSquare
         """
+        if data is None:
+            data = symbol_dict[0]
 
         self.previous = prev
-        self.next = next
+        self.next = nxt
         self.data = data
 
     # def __str__(self):
@@ -66,7 +73,7 @@ class Tape:
         parent: TapeSquare we are attaching this new TS to on the left
         """
 
-        return TapeSquare(next=self.current)
+        return TapeSquare(nxt=self.current)
 
     def add_right(self):
         """

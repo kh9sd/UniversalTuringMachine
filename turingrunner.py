@@ -1,9 +1,10 @@
 import time
-from mconfig import MConfig
 import inputtotape
-from iniparser import parse # we can't use ConfigParser bc it strips whitespace
-# TODO make the prase actually useful
+import config
+
+import mconfig
 import tape
+MConfig = mconfig.MConfig
 Tape = tape.Tape
 
 
@@ -91,7 +92,7 @@ def master_process(in_sd):
         raise TypeError("Input is not a str for DN or SD processing")
 
 
-def run_tm(mdict, tp=Tape()):
+def run_tm(mdict, t=Tape()):
     """
     actual running machine for the TM (UTM YEEEEEEEEEET)
     doesn't return anything, just prints the formatted TM after each move
@@ -106,25 +107,25 @@ def run_tm(mdict, tp=Tape()):
         default is just an empty tape, can possibly input already filled tapes
     """
 
-    tape = tp
+    tp = t
 
     # intitalizer for loop, only thing that matters is the q_1 next
     current_mcon = MConfig("DADDCRDA")
 
     while True:
         try:
-            current_mcon = mdict[(current_mcon.next, tape.get_symbol())]
+            current_mcon = mdict[(current_mcon.next, tp.get_symbol())]
         except KeyError:
             raise KeyError("Failed transition, no match "
                            "for given m-config and symbol!: "
-                           f"{current_mcon.next} and  {tape.get_symbol()}")
+                           f"{current_mcon.next} and  {tp.get_symbol()}")
 
         print_com, move_com = current_mcon.operation
-        tape.set_symbol(print_com[1:])
-        tape.move(move_com)
+        tp.set_symbol(print_com[1:])
+        tp.move(move_com)
 
         print(f"Current m-config: {current_mcon.name}")
-        print(tape)
+        print(tp)
 
         time.sleep(0.75)
 
@@ -163,9 +164,16 @@ def process_inputted_tape():
 #    3133225317
 # DADDCNDAA;DAADCDCNDA;
 # purposefully erroring TM
+# DADDCRDAA;DADCDCLDAA;DAADDCLDA;DAADCDCRDAAA;
+# 2-state, 2-symbol BB
 
 
 if __name__ == "__main__":
+    if input("Do you want to load custom symbols from the config file? Y/N\n") == "Y":
+        setup_dict = config.sym_dict
+        mconfig.symbol_dict = setup_dict
+        tape.symbol_dict = setup_dict
+
     starting_tape = process_inputted_tape()
 
     input_sd = input("Enter your TM as a DN or SD: ")
@@ -176,6 +184,7 @@ if __name__ == "__main__":
     except ValueError as e:
         print("\nInvalid input for TM:\n", e)
         quit()
+    # display_mconfig_dict(mcons)
 
     try:
         run_tm(mcons, starting_tape)

@@ -1,13 +1,9 @@
+import config
+
 """
 holds dict for conversion between number of C's after D to a symbol
 """
-# TODO: make this more easier definable by the user
-# also consider making symbol it's own class?
-symbol_dict = {
-    0: " ",
-    1: "0",
-    2: "1"
-}
+symbol_dict = config.default_dict
 
 
 def name_to_english(nm):
