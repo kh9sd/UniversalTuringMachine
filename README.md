@@ -2,13 +2,13 @@
 
 runs Standard Descriptions and Description Numbers of Turing machines
 
-## Setup
-Download the files, you only need to worry about two of them, config.py and turingrunner.py
+## Setup and usage
+Download the files, you only need to worry about two of them, `config.py` and `turingrunner.py`
 
 `config.py` contains a dictionary that defines what character are defined by the 0th symbol, 1st symbol, etc
 
 Any change that isn't extending the dictionary for symbols is purely visual in 
-regards to whether or not a TM wil halt.
+regards to whether or not a TM will halt.
 
 Example: we have the dictionary
 ```
@@ -20,7 +20,7 @@ sym_dict = {
 ```
 So the 0th symbol is a space, the 1st symbol is a 0, and the 2nd symbol is a 1.
 If you want to change this mapping, go ahead but remember these key things:
-1. Don't change the name sym_dict or any of the syntax braces, colons, etc
+1. Don't change the name *sym_dict* or any of the syntax braces, colons, etc
 2. The values on the lefthand side must be plain integers
 3. The values on the righthand side must be surrounded by quotes
 
@@ -36,7 +36,7 @@ will repeatedly prompt you otherwise.
 
 So for example, if I wanted a tape 
 
-[a][bee][c][<ins>d</ins>][2][1] where the underlined square is the current one
+*[a][bee][c][<ins>d</ins>][2][1]* where the underlined square is the current one
 
 Then I can set my delimiter to the 5 character, and input
 - a5bee5c for the left
@@ -53,9 +53,9 @@ Every m-configuration for a Turing machine can be made with the following format
    - we will standardize this convention of q<sub>i</sub> to start at 1
 - Symbol: the scanned symbol for an m-config can be described in the format of  s<sub>j</sub>. 
 The exact symbol values are defined in the config.py file
-   - if j = 0, the symbol is the 0th symbol
-   - if j = 1, the symbol is the 1st symbol
-   - if j = 2, the symbol is the 2nd symbol
+   - if *j = 0*, the symbol is the 0th symbol
+   - if *j = 1*, the symbol is the 1st symbol
+   - if *j = 2*, the symbol is the 2nd symbol
 - Operation: an operation has the format of a symbol to be printed with the above format, followed by an command to move left, right, or not at all
    - while this technically means we have to print a character, if we don't want any changes we can just print the same character as scanned
 - Next: tells us the name of the next m-config, follows the same format as above
