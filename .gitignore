@@ -4,3 +4,4 @@ ideas.txt
 .idea/
 config.ini
 config.py
+iniparser.py
