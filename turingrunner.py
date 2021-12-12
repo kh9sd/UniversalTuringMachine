@@ -169,10 +169,8 @@ def process_inputted_tape():
 
 
 if __name__ == "__main__":
-    if input("Do you want to load custom symbols from the config file? Y/N\n") == "Y":
-        setup_dict = config.sym_dict
-        mconfig.symbol_dict = setup_dict
-        tape.symbol_dict = setup_dict
+    # set symbol dict
+    mconfig.symbol_dict = tape.symbol_dict = config.sym_dict
 
     starting_tape = process_inputted_tape()
 

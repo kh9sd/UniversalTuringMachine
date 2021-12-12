@@ -3,7 +3,7 @@ import config
 """
 holds dict for conversion between number of C's after D to a symbol
 """
-symbol_dict = config.default_dict
+symbol_dict = {}
 
 
 def name_to_english(nm):

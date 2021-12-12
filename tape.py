@@ -1,6 +1,12 @@
-import config
-
-symbol_dict = config.default_dict
+# this dict is overridden by the main loop
+# we keep it here because the __init__ of the TapeSquare runs
+# symbol_dict[0] at import
+# technically the other values are useless but meh
+symbol_dict = {
+    0: " ",
+    1: "0",
+    2: "1"
+}
 
 
 class TapeSquare:
@@ -18,6 +24,8 @@ class TapeSquare:
         data: string
             symbol stored on the TSquare
         """
+        # setting data to symbol_dict[0] at the header doesn't re-evaluate the
+        # argument if the dict changes
         if data is None:
             data = symbol_dict[0]
 
