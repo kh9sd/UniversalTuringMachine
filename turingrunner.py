@@ -57,7 +57,7 @@ def process_standard_des(sd):
         made up of "D", "A", "C", "L", "R", "N", and ";", represents a TM
     """
 
-    dict = {}
+    dct = {}
 
     chunks = sd.split(";")
 
@@ -66,12 +66,12 @@ def process_standard_des(sd):
 
     for chunk in chunks[:-1]:  # ignore last element, will be blank
         mcon = MConfig(chunk)
-        if (mcon.name, mcon.symbol) not in dict:
-            dict[(mcon.name, mcon.symbol)] = mcon
+        if (mcon.name, mcon.symbol) not in dct:
+            dct[(mcon.name, mcon.symbol)] = mcon
         else:
             raise ValueError("Failed m-config log, "
                              "duplicate m-config names and symbol")
-    return dict
+    return dct
 
 
 def master_process(in_sd):
@@ -108,7 +108,7 @@ def run_tm(mdict, t=Tape()):
     """
 
     tp = t
-
+    moves = 0
     # intitalizer for loop, only thing that matters is the q_1 next
     current_mcon = MConfig("DADDCRDA")
 
@@ -116,6 +116,7 @@ def run_tm(mdict, t=Tape()):
         try:
             current_mcon = mdict[(current_mcon.next, tp.get_symbol())]
         except KeyError:
+            # raise KeyError(f"{current_mcon.next} and  {tp.get_symbol()}")
             raise KeyError("Failed transition, no match "
                            "for given m-config and symbol!: "
                            f"{current_mcon.next} and  {tp.get_symbol()}")
@@ -124,7 +125,9 @@ def run_tm(mdict, t=Tape()):
         tp.set_symbol(print_com[1:])
         tp.move(move_com)
 
-        print(f"Current m-config: {current_mcon.name}")
+        moves += 1
+        print(f"\nMove {moves} after m-config: {current_mcon.name}")
+        # print(f"\nCurrent m-config: {current_mcon.name} on move {moves}")
         print(tp)
 
         time.sleep(0.75)
@@ -179,13 +182,10 @@ if __name__ == "__main__":
 
     try:
         mcons = master_process(input_sd)
-    except ValueError as e:
+        run_tm(mcons, starting_tape)
+    except ValueError as e:  # first line throws error
         print("\nInvalid input for TM:\n", e)
         quit()
-    # display_mconfig_dict(mcons)
-
-    try:
-        run_tm(mcons, starting_tape)
-    except KeyError as e:
-        print("\nThis TM halted!\nReason:", e)
+    except KeyError as e:  # second line throws error
+        print("\nThis TM halted!", e.args[0], sep="\n")  # avoids the quotes around the error message
         quit()
