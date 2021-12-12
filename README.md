@@ -7,9 +7,6 @@ Download the files, you only need to worry about two of them, `config.py` and `t
 
 `config.py` contains a dictionary that defines what character are defined by the 0th symbol, 1st symbol, etc
 
-Any change that isn't extending the dictionary for symbols is purely visual in 
-regards to whether or not a TM will halt.
-
 Example: we have the dictionary
 ```
 sym_dict = {
@@ -36,14 +33,16 @@ will repeatedly prompt you otherwise.
 
 So for example, if I wanted a tape 
 
-*[a][bee][c][<ins>d</ins>][2][1]* where the underlined square is the current one
+**[a][bee][c][<ins>d</ins>][2][1]** where the underlined square is the current one
 
 Then I can set my delimiter to the 5 character, and input
 - a5bee5c for the left
 - d for the current (underlined) square
 - 251 for the right
 
-Now, the actual Standard Descriptions and Descriptions are a bit more complicated
+Note that this custom tape doesn't care about the symbol_dict at all, like why should it
+
+Now, the actual Standard Descriptions and Description Numbers are a bit more complicated
 
 ## Standard Descriptions
 Standard Descriptions (SDs) and Description Numbers (DNs heh) are described in https://en.wikipedia.org/wiki/Description_number
