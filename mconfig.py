@@ -1,4 +1,10 @@
 import config
+from enum import Enum
+
+class Move(Enum):
+    LEFT = "L"
+    RIGHT = "R"
+    STAY = "N"
 
 """
 holds dict for conversion between number of C's after D to a symbol
