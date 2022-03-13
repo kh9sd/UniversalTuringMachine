@@ -35,9 +35,9 @@ def test_oper_to_english():
         2: "1"
     }
 
-    assert oper_to_english("L") == (" ", "L")
-    assert oper_to_english("CR") == ("0", "R")
-    assert oper_to_english("CCN") == ("1", "N")
+    assert oper_to_english("L") == (" ", Move.LEFT)
+    assert oper_to_english("CR") == ("0", Move.RIGHT)
+    assert oper_to_english("CCN") == ("1", Move.STAY)
 
 
 def test_verify():
@@ -123,4 +123,3 @@ def test_mconfig(example_mconfig_data):
     }
     assert str(example_mconfig_data) == "('q_1', \"' '\", (\"P'0'\", 'R'), 'q_1')"
     # ('q_1', "' '", ("P'0'", 'R'), 'q_1')
-

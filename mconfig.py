@@ -1,11 +1,5 @@
 import config
-from enum import Enum
-
-
-class Move(Enum):
-    LEFT = "L"
-    RIGHT = "R"
-    STAY = "N"
+from constants import *
 
 
 def name_to_english(nm):
@@ -42,14 +36,19 @@ def oper_to_english(opr):
     returns a tuple formatted as
     (symbol, move)
         where symbol is a string from the MConfig.symbol_dict
-        and move is a string, one of "L", "R", or "N"
+        and move is a Move, one of an enumeration
 
     opr: string
         chain of C's with a ending of L, R, or N
         (ex. "CCCCN" or "R" or "L" "CR")
     """
-
-    return symbol_to_english(opr[:-1]), opr[-1]
+    match opr[-1]:
+        case "L":
+            return symbol_to_english(opr[:-1]), Move.LEFT
+        case "R":
+            return symbol_to_english(opr[:-1]), Move.RIGHT
+        case "N":
+            return symbol_to_english(opr[:-1]), Move.STAY
 
 
 def verify(sd):
@@ -188,9 +187,9 @@ class MConfig:
         symbol: string
             symbol from the symbol_dict
 
-        operation: tuple (string, string)
+        operation: tuple (string, Move)
             first str from the symbol_dict
-            second str is either "L", "R", or "N"
+            second value is either Move.LEFT, Move.RIGHT, Move.STAY
 
         next: int
             name of the next M-Config
@@ -218,11 +217,10 @@ class MConfig:
     def __str__(self):
         str_name = "q_" + str(self.name)
         str_sym = "'" + self.symbol + "'"
-        str_oper = "P" + "'" + self.operation[0] + "'", self.operation[1]
+        str_oper = "P" + "'" + self.operation[0] + "'", self.operation[1].value
         str_next = "q_" + str(self.next)
 
         return str((str_name,
                     str_sym,
                     str_oper,
                     str_next))
-
