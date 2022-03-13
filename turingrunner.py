@@ -1,6 +1,5 @@
 import time
 import inputtotape
-import config
 
 import mconfig
 import tape
@@ -172,9 +171,6 @@ def process_inputted_tape():
 
 
 if __name__ == "__main__":
-    # set symbol dict
-    mconfig.symbol_dict = tape.symbol_dict = config.sym_dict
-
     starting_tape = process_inputted_tape()
 
     input_sd = input("Enter your TM as a DN or SD: ")

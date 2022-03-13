@@ -1,12 +1,5 @@
-# this dict is overridden by the main loop
-# we keep it here because the __init__ of the TapeSquare runs
-# symbol_dict[0] at import
-# technically the other values are useless but meh
-symbol_dict = {
-    0: " ",
-    1: "0",
-    2: "1"
-}
+import config
+from constants import *
 
 
 class TapeSquare:
@@ -14,8 +7,9 @@ class TapeSquare:
     represents a single square on the tape of a Turing machine
     basically implemented as a linked list node
     """
+    symbol_dict = config.sym_dict
 
-    def __init__(self, prev=None, nxt=None, data=None):
+    def __init__(self, data=None, prev=None, nxt=None):
         """
         previous : another TapeSquare
             reference to the next TS to the left
@@ -27,16 +21,16 @@ class TapeSquare:
         # setting data to symbol_dict[0] at the header doesn't re-evaluate the
         # argument if the dict changes
         if data is None:
-            data = symbol_dict[0]
+            data = TapeSquare.symbol_dict[0]
 
-        self.previous = prev
+        self.prev = prev
         self.next = nxt
         self.data = data
 
-    # def __str__(self):
-    #     return "(prev: {}, next: {}, data: {})".format(self.previous,
-    #                                                    self.next,
-    #                                                    self.data)
+    def __str__(self):
+        return "(prev: {}, next: {}, data: {})".format(id(self.prev),
+                                                       id(self.next),
+                                                       self.data)
 
 
 class Tape:
@@ -47,7 +41,7 @@ class Tape:
     It also holds the current square on the tape, also in the spirit of Turing!
     """
 
-    def __init__(self):
+    def __init__(self, lst, pos):
         """
         initializes a totally blank tape
 
@@ -55,7 +49,24 @@ class Tape:
             holds the current TapeSquare the TM is processing
         """
 
-        self.current = TapeSquare()
+        if not lst:
+            self.current = TapeSquare()
+            return
+
+        if pos >= len(lst):
+            raise ValueError("Position is out of bounds of list (index starts at 0)")
+
+        cur_sqr = sentinel_head = TapeSquare()
+
+        for item in lst:
+            cur_sqr.next = TapeSquare(item, prev=cur_sqr)
+            cur_sqr = cur_sqr.next
+
+        for i in range((len(lst) - 1) - pos):
+            cur_sqr = cur_sqr.prev
+
+        sentinel_head.next.prev = None
+        self.current = cur_sqr
 
     def get_symbol(self):
         """
@@ -81,7 +92,8 @@ class Tape:
         parent: TapeSquare we are attaching this new TS to on the left
         """
 
-        return TapeSquare(nxt=self.current)
+        new_sqr = TapeSquare(nxt=self.current)
+        self.current.prev = new_sqr
 
     def add_right(self):
         """
@@ -91,7 +103,8 @@ class Tape:
         parent: TapeSquare we are attaching this new TS to on the right
         """
 
-        return TapeSquare(prev=self.current)
+        new_sqr = TapeSquare(prev=self.current)
+        self.current.next = new_sqr
 
     def move_left(self):
         """
@@ -99,9 +112,9 @@ class Tape:
         also handles if this is the leftmost square
         """
 
-        if self.current.previous is None:
-            self.current.previous = self.add_left()
-        self.current = self.current.previous
+        if self.current.prev is None:
+            self.add_left()
+        self.current = self.current.prev
 
     def move_right(self):
         """
@@ -110,7 +123,7 @@ class Tape:
         """
 
         if self.current.next is None:
-            self.current.next = self.add_right()
+            self.add_right()
         self.current = self.current.next
 
     def square_check(self, sym):
@@ -134,19 +147,15 @@ class Tape:
             will move left, right, or not at all accordingly
         """
 
-        if instruct == "N":
+        if instruct == Move.STAY:
             pass
-        elif instruct == "L":
+        elif instruct == Move.LEFT:
             self.move_left()
-        elif instruct == "R":
+        elif instruct == Move.RIGHT:
             self.move_right()
         else:
             raise RuntimeError('Movement command is not "N", "L", or "R"')
 
-    """
-    ALL THE FUNCTIONS BELOW AREN'T ESSENTIAL FOR THE TM TO WORK
-    THEY'RE THERE FOR OTHER FUNCTIONS WE WANT TO DO
-    """
     def traverse_end(self, go_left=True):
         holder = self.current
         if go_left:
@@ -157,6 +166,9 @@ class Tape:
                 holder = holder.next
 
         return holder
+
+    def __repr__(self):
+        return str(self)
 
     def __str__(self):
         """
@@ -171,10 +183,10 @@ class Tape:
             cur = cur.next
 
         to_left = []
-        cur = self.current.previous
+        cur = self.current.prev
         while cur is not None:
             to_left.append(f"[{cur.data}]")
-            cur = cur.previous
+            cur = cur.prev
 
         right_str = "".join(to_right)
         left_str = "".join(to_left[::-1])
@@ -185,13 +197,45 @@ class Tape:
                 "\033[0m" +
                 right_str)
 
+    def __eq__(self, other):
+        if not isinstance(other, Tape):
+            return False
+
+        # start checking if ahead list matches
+        cur_this = self.current
+        cur_other = other.current
+
+        while cur_this and cur_other:
+            if cur_this.data != cur_other.data:
+                return False
+
+            cur_this, cur_other = cur_this.next, cur_other.next
+
+        if cur_this or cur_other:  # both must be None
+            return False
+
+        # start checking if before list matches
+        cur_this = self.current
+        cur_other = other.current
+
+        while cur_this and cur_other:
+            if cur_this.data != cur_other.data:
+                return False
+
+            cur_this, cur_other = cur_this.prev, cur_other.prev
+
+        if cur_this or cur_other:
+            return False
+
+        return True
+
 
 def join_squares(left, right):
-    if left.next is not None and right.previous is not None:
+    if left.next is not None and right.prev is not None:
         raise AttributeError("Inputted squares aren't free on the sides")
     else:
         left.next = right
-        right.previous = left
+        right.prev = left
 
 
 def join_tapes(left, right):
