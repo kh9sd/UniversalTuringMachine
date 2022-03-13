@@ -10,3 +10,6 @@ default_dict = {
     1: "0",
     2: "1"
 }
+
+tape_array = []
+cur_pos = 0
