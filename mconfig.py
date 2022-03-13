@@ -224,3 +224,12 @@ class MConfig:
                     str_sym,
                     str_oper,
                     str_next))
+
+    def __eq__(self, other):
+        if not isinstance(other, MConfig):
+            return False
+
+        return self.name == other.name and \
+            self.symbol == other.symbol and \
+            self.operation == other.operation and \
+            self.next == other.next
