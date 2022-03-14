@@ -1,5 +1,5 @@
 __pycache__/
-tests lol/.pytest_cache/
+tests/.pytest_cache/
 testturingmachine.py
 ideas.txt
 .idea/
