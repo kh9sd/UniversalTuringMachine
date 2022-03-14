@@ -154,7 +154,6 @@ class TuringMachine:
             self.cur_mcon == other.cur_mcon
 
 
-
 # example SDs and DNs
 # DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
 #    31332531173113353111731113322531111731111335317
@@ -171,19 +170,3 @@ class TuringMachine:
 # DADDCRDAA;DADCDCLDAA;DAADDCLDA;DAADCDCRDAAA;
 # 2-state, 2-symbol BB
 
-
-# if __name__ == "__main__":
-#     starting_tape = process_inputted_tape()
-#
-#     input_sd = input("Enter your TM as a DN or SD: ")
-#     # input_sd = "DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;"
-#
-#     try:
-#         mcons = master_process(input_sd)
-#         run_tm(mcons, starting_tape)
-#     except ValueError as e:  # first line throws error
-#         print("\nInvalid input for TM:\n", e)
-#         quit()
-#     except KeyError as e:  # second line throws error
-#         print("\nThis TM halted!", e.args[0], sep="\n")  # avoids the quotes around the error message
-#         quit()
