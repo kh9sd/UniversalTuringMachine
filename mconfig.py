@@ -1,4 +1,8 @@
-import config
+import sys
+if "pytest" in sys.modules:
+    import tests.testing_config as config
+else:
+    import config
 from constants import *
 
 

@@ -5,9 +5,7 @@ from mconfig import *
 
 @pytest.fixture
 def example_mconfig_data():
-    ex = MConfig("DADDCRDA")  # (q_1, ' ', (P'1', R), q_1)
-
-    return ex
+    return MConfig("DADDCRDA")  # (q_1, ' ', (P'1', R), q_1)
 
 
 def test_name_to_english():
@@ -17,24 +15,12 @@ def test_name_to_english():
 
 
 def test_symbol_to_english():
-    MConfig.symbol_dict = {
-        0: " ",
-        1: "0",
-        2: "1"
-    }
-
     assert symbol_to_english("") == " "
     assert symbol_to_english("C") == "0"
     assert symbol_to_english("CC") == "1"
 
 
 def test_oper_to_english():
-    MConfig.symbol_dict = {
-        0: " ",
-        1: "0",
-        2: "1"
-    }
-
     assert oper_to_english("L") == (" ", Move.LEFT)
     assert oper_to_english("CR") == ("0", Move.RIGHT)
     assert oper_to_english("CCN") == ("1", Move.STAY)
@@ -116,10 +102,5 @@ def test_is_all_char():
 
 
 def test_mconfig(example_mconfig_data):
-    MConfig.symbol_dict = {
-        0: " ",
-        1: "0",
-        2: "1"
-    }
     assert str(example_mconfig_data) == "('q_1', \"' '\", (\"P'0'\", 'R'), 'q_1')"
     # ('q_1', "' '", ("P'0'", 'R'), 'q_1')
