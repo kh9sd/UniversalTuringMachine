@@ -130,18 +130,6 @@ class Tape:
             self.add_right()
         self.current = self.current.next
 
-    def square_check(self, sym):
-        """
-        checks if current square symbol is same as passed symbol
-
-        returns a Boolean
-
-        symbol: string
-            symbol we are checking
-        """
-
-        return self.current.data == sym
-
     def move(self, instruct):
         """
         moves the current square according to instruction passed
@@ -159,17 +147,6 @@ class Tape:
             self.move_right()
         else:
             raise RuntimeError('Movement command is not "N", "L", or "R"')
-
-    def traverse_end(self, go_left=True):
-        holder = self.current
-        if go_left:
-            while holder.previous is not None:
-                holder = holder.previous
-        else:
-            while holder.next is not None:
-                holder = holder.next
-
-        return holder
 
     def __repr__(self):
         return str(self)
@@ -232,22 +209,3 @@ class Tape:
             return False
 
         return True
-
-
-def join_squares(left, right):
-    if left.next is not None and right.prev is not None:
-        raise AttributeError("Inputted squares aren't free on the sides")
-    else:
-        left.next = right
-        right.prev = left
-
-
-def join_tapes(left, right):
-    """
-    joins two tapes together, left and right respectively
-    NOTE: THIS FUNCTION MODIFIES THE TAPES IN-PLACE
-    """
-    rightmost_left = left.traverse_end(False)
-    leftmost_right = right.traverse_end(True)
-
-    join_squares(rightmost_left, leftmost_right)
