@@ -61,6 +61,15 @@ def test_tape(example_tape_asd__def_shit, example_blank_tape):
     assert Tape(["asd", "def", "shit"], 1) == example_tape_asd__def_shit
     assert Tape([], 12321) == example_blank_tape
 
+    with pytest.raises(ValueError):
+        Tape(["asd", "def", "shit"], -1)
+
+    with pytest.raises(ValueError):
+        Tape(["asd", "def", "shit"], 3)
+
+    with pytest.raises(ValueError):
+        Tape(["asd", "def", "shit"], 1312312)
+
 
 def test_get_symbol(example_tape_asd__def_shit, example_blank_tape):
     assert example_tape_asd__def_shit.get_symbol() == "def"

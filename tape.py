@@ -57,7 +57,7 @@ class Tape:
             self.current = TapeSquare()
             return
 
-        if pos >= len(lst):
+        if pos not in range(0, len(lst)):
             raise ValueError("Position is out of bounds of list (index starts at 0)")
 
         cur_sqr = sentinel_head = TapeSquare()
