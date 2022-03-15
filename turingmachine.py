@@ -95,7 +95,7 @@ class TuringMachine:
         self.moves = moves
 
         if not c_mcon:
-            self.cur_mcon = self.mcons[(1, self.tape.get_symbol())]
+            self.cur_mcon = self.mcons[(1, config.sym_dict[0])]
         else:
             self.cur_mcon = c_mcon
 
@@ -123,7 +123,10 @@ class TuringMachine:
 
         returns String
         """
-        return f"Move {self.moves} on m-config: {self.cur_mcon.name}\n{self.tape}\n"
+        if self.cur_mcon:
+            return f"Move {self.moves} on m-config: {self.cur_mcon.name}\n{self.tape}\n"
+        else:
+            return f"Move {self.moves} on m-config: {self.cur_mcon}\n{self.tape}\n"
 
     def do_move(self):
         """
@@ -131,18 +134,17 @@ class TuringMachine:
         doesn't return anything, just runs the whole apply mcon and switches mcons
         will throw exceptions to catch if the TM halts at any point
         """
+        if not self.cur_mcon or not self.tape.square_check(self.cur_mcon.symbol):
+            raise HaltedException(f"This TM has halted after {self.moves} moves!")
+
         print_sym, move_com = self.cur_mcon.operation
 
         self.tape.set_symbol(print_sym)
         self.tape.move(move_com)
         self.moves += 1
 
-        try:
-            self.cur_mcon = self.mcons[(self.cur_mcon.next, self.tape.get_symbol())]
-        except KeyError:
-            raise HaltedException("Failed transition, no match "
-                                  "for given m-config and symbol!: "
-                                  f"{self.cur_mcon.next} and  {self.tape.get_symbol()}")
+        self.cur_mcon = self.mcons.get((self.cur_mcon.next, self.tape.get_symbol()),
+                                       None)
 
     def __eq__(self, other):
         if not isinstance(other, TuringMachine):
@@ -152,21 +154,3 @@ class TuringMachine:
             self.mcons == other.mcons and \
             self.moves == other.moves and \
             self.cur_mcon == other.cur_mcon
-
-
-# example SDs and DNs
-# DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA; prints 0's and 1's right
-#    31332531173113353111731113322531111731111335317
-# DADDLDA;  prints blanks to the left
-#    31334317
-# DADDCLDA;  prints 0's to the left
-#    313324317
-# DADDCRDA;  prints 0's to the right
-#    313325317
-# DADDCCRDA; prints 1's to the right
-#    3133225317
-# DADDCNDAA;DAADCDCNDA;
-# purposefully erroring TM
-# DADDCRDAA;DADCDCLDAA;DAADDCLDA;DAADCDCRDAAA;
-# 2-state, 2-symbol BB
-

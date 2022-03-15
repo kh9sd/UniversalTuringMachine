@@ -1,6 +1,8 @@
 import pytest
 
 from turingmachine import *
+
+
 # import turingmachine as tm
 
 
@@ -79,12 +81,12 @@ def test_get_tape(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
 
 def test_get_whole_state(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
     assert example_inf_0_1_right_TM.get_whole_state() == \
-        """Move 0 on m-config: 1
+           """Move 0 on m-config: 1
 \033[4m[ ]\033[0m
 """
 
     assert example_inf_0_1_TM_starter.get_whole_state() == \
-        """Move 2 on m-config: 1
+           """Move 2 on m-config: 1
 [among][us]\033[4m[ ]\033[0m
 """
 
@@ -118,6 +120,18 @@ def test_do_move(example_2_state_2_sym_BB_SD, example_BB_mconfigs):
                               5,
                               example_BB_mconfigs[(2, "0")])
 
+    a.do_move()
+    halted = TuringMachine(example_2_state_2_sym_BB_SD,
+                           Tape(["0", "0", "0", "0"], 2),
+                           6,
+                           None)
+
+    halted.cur_mcon = None
+    assert a == halted
+
     with pytest.raises(HaltedException):
         a.do_move()
 
+    b = TuringMachine(example_2_state_2_sym_BB_SD, Tape(["0", "0"], 0))
+    with pytest.raises(HaltedException):
+        b.do_move()
