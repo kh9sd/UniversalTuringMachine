@@ -1,60 +1,58 @@
-import config
-
-"""
-holds dict for conversion between number of C's after D to a symbol
-"""
-symbol_dict = {}
+import sys
+if "pytest" in sys.modules:
+    import tests.testing_config as config
+else:
+    import config
+from constants import *
 
 
 def name_to_english(nm):
     """
-    makes an string representation of chain of A's passed from SD
+    makes a representation of chain of A's passed from SD
 
-    returns a string in the format of "q_{int}"
-        int is determined by the length of the passed A's chain
+    returns an int
 
     nm: string
         a string of pure A's (ex. "AAAAAA" or "")
     """
 
-    return "q_" + str(len(nm))
+    return len(nm)
 
 
 def symbol_to_english(sym):
     """
     makes a string representation of chain of C's passed from SD
 
-    returns a symbol in the symbol_dict
+    returns a symbol in the MConfig.symbol_dict
 
     sym: string
         a string of pure C's (ex. "CCC" or "")
     """
 
-    return symbol_dict[len(sym)]
+    return MConfig.symbol_dict[len(sym)]
 
 
 def oper_to_english(opr):
     """
     makes a string representation of chain of C's
-    capped by a L, R, or N from the SD
+    capped by an L, R, or N from the SD
 
     returns a tuple formatted as
-    ("P{symbol}"", move)
-        where symbol is a symbol from the symbol_dict
-        and move is a string, one of "L", "R", or "N"
+    (symbol, move)
+        where symbol is a string from the MConfig.symbol_dict
+        and move is a Move, one of an enumeration
 
     opr: string
         chain of C's with a ending of L, R, or N
         (ex. "CCCCN" or "R" or "L" "CR")
     """
-
-    return "P" + symbol_to_english(opr[:-1]), opr[-1]
-
-
-"""
-holds set of possible letters in SD
-"""
-verify_set = {"D", "A", "C", "L", "R", "N"}
+    match opr[-1]:
+        case "L":
+            return symbol_to_english(opr[:-1]), Move.LEFT
+        case "R":
+            return symbol_to_english(opr[:-1]), Move.RIGHT
+        case "N":
+            return symbol_to_english(opr[:-1]), Move.STAY
 
 
 def verify(sd):
@@ -77,6 +75,7 @@ def verify(sd):
             must have another D followed by some A's
     """
 
+    verify_set = {"D", "A", "C", "L", "R", "N"}
     letter_set = set(sd)
 
     if letter_set.issubset(verify_set):
@@ -88,8 +87,8 @@ def verify(sd):
                 (symbol_check(chunks[2])) and
                 (operation_check(chunks[3])) and
                 (next_check(chunks[4])))
-    else:
-        return False
+
+    return False
 
 
 def name_check(chk):
@@ -130,6 +129,7 @@ def operation_check(chk):
     """
 
     if chk != "":
+        # if chk[-1] == Move.LEFT or chk[-1] == Move.RIGHT or chk[-1] == Move.RIGHT:
         if chk[-1] == "L" or chk[-1] == "R" or chk[-1] == "N":
             return symbol_check(chk[:-1])
     return False
@@ -173,6 +173,7 @@ class MConfig:
      a instruction for a Turing Machine
     """
     # ex. DADDCLDA, all ;'s already removed'
+    symbol_dict = config.sym_dict
 
     def __init__(self, sd):
         """
@@ -184,18 +185,17 @@ class MConfig:
 
 
         Fields:
-        name: string
-            name of the m-config
-            formatted like q_{int} (ex. q_1)
+        name: int
+            id of the m-config
 
         symbol: string
             symbol from the symbol_dict
 
-        operation: tuple (string, string)
-            first str formatted like "P{symbol}"
-            second str is either "L", "R", or "N"
+        operation: tuple (string, Move)
+            first str from the symbol_dict
+            second value is either Move.LEFT, Move.RIGHT, Move.STAY
 
-        next: string
+        next: int
             name of the next M-Config
 
 
@@ -219,7 +219,21 @@ class MConfig:
         self.next = name_to_english(holder[3])
 
     def __str__(self):
-        """
-        creates and returns string representation of M-Config
-        """
-        return str((self.name, self.symbol, self.operation, self.next))
+        str_name = "q_" + str(self.name)
+        str_sym = "'" + self.symbol + "'"
+        str_oper = "P" + "'" + self.operation[0] + "'", self.operation[1].value
+        str_next = "q_" + str(self.next)
+
+        return str((str_name,
+                    str_sym,
+                    str_oper,
+                    str_next))
+
+    def __eq__(self, other):
+        if not isinstance(other, MConfig):
+            return False
+
+        return self.name == other.name and \
+            self.symbol == other.symbol and \
+            self.operation == other.operation and \
+            self.next == other.next

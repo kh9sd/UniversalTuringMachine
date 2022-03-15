@@ -1,7 +1,7 @@
 __pycache__/
+tests/.pytest_cache/
 testturingmachine.py
 ideas.txt
 .idea/
-config.ini
 config.py
-iniparser.py
+
