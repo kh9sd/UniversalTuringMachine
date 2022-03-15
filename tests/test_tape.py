@@ -136,3 +136,6 @@ def test_move(example_tape_asd__def_shit, example_tape__asd_def_shit, example_ta
     # fuck the blank tape
 
 
+def test_square_check(example_tape_asd__def_shit):
+    assert example_tape_asd__def_shit.square_check("def")
+    assert not example_tape_asd__def_shit.square_check("among")

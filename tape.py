@@ -148,6 +148,16 @@ class Tape:
         else:
             raise RuntimeError('Movement command is not "N", "L", or "R"')
 
+    def square_check(self, sym):
+        """
+        checks if current square symbol is same as passed symbol
+        returns a Boolean
+        symbol: string
+            symbol we are checking
+        """
+
+        return self.current.data == sym
+
     def __repr__(self):
         return str(self)
 
