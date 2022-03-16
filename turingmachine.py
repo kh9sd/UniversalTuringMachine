@@ -120,7 +120,7 @@ class TuringMachine:
 
         returns String
         """
-        return f"Move {self.moves} on m-config: {self.cur_mcon}\n{self.tape}\n"
+        return f"After move {self.moves} on m-config: {self.cur_mcon}\n{self.tape}\n"
 
     def do_move(self):
         """

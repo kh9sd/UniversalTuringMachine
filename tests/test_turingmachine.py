@@ -92,12 +92,12 @@ def test_get_tape(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
 
 def test_get_whole_state(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
     assert example_inf_0_1_right_TM.get_whole_state() == \
-           """Move 0 on m-config: 1
+           """After move 0 on m-config: 1
 \033[4m[ ]\033[0m
 """
 
     assert example_inf_0_1_TM_starter.get_whole_state() == \
-           """Move 2 on m-config: 1
+           """After move 2 on m-config: 1
 [among][us]\033[4m[ ]\033[0m
 """
 
