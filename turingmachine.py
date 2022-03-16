@@ -89,7 +89,7 @@ class TuringMachine:
         self.mcons = master_process(mconfigs)
 
         if not tp:
-            self.tape = Tape(config.tape_array, config.cur_pos)
+            self.tape = Tape(config.TAPE_ARRAY, config.CUR_POS)
         else:
             self.tape = tp
         self.moves: int = moves

@@ -173,7 +173,7 @@ class MConfig:
      a instruction for a Turing Machine
     """
     # ex. DADDCLDA, all ;'s already removed'
-    symbol_dict = config.sym_dict
+    symbol_dict = config.SYMBOL_DICT
 
     def __init__(self, sd):
         """
@@ -213,10 +213,10 @@ class MConfig:
             else:
                 holder[-1] = holder[-1] + char
 
-        self.name = name_to_english(holder[0])
-        self.symbol = symbol_to_english(holder[1])
+        self.name: int = name_to_english(holder[0])
+        self.symbol: str = symbol_to_english(holder[1])
         self.operation = oper_to_english(holder[2])
-        self.next = name_to_english(holder[3])
+        self.next: int = name_to_english(holder[3])
 
     def __str__(self):
         str_name = "q_" + str(self.name)

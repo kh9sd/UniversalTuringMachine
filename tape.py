@@ -11,7 +11,7 @@ class TapeSquare:
     represents a single square on the tape of a Turing machine
     basically implemented as a linked list node
     """
-    symbol_dict = config.sym_dict
+    symbol_dict = config.SYMBOL_DICT
 
     def __init__(self, data=None, prev=None, nxt=None):
         """

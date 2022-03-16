@@ -5,12 +5,12 @@ runs Standard Descriptions and Description Numbers of Turing machines
 ## Setup and usage
 Download the files, you only need to worry about two of them, `config.py` and `main.py`
 
-`config.py` contains a dictionary `sym_dict` that defines what character are 
+`config.py` contains a dictionary `SYMBOL_DICT` that defines what character are 
 defined by the 0th symbol, 1st symbol, etc
 
 Example: we have the dictionary
 ```
-sym_dict = {
+SYMBOL_DICT = {
     0: " ",
     1: "0",
     2: "1"
@@ -24,9 +24,9 @@ If you want to change this mapping, go ahead but remember these key things:
 
 By default, new tape squares start with the 0th symbol. We keep a default_dict in the file just for your reference.
 
-It also contains `tape_array` and `cur_pos`, which can be set to get a custom
-starting tape. `tape_array` defines the order and characters on each square,
-and `cur_pos` tells which square the Turing Machine is currently located at,
+It also contains `TAPE_ARRAY` and `CUR_POS`, which can be set to get a custom
+starting tape. `TAPE_ARRAY` defines the order and characters on each square,
+and `CUR_POS` tells which square the Turing Machine is currently located at,
 leftmost square is 0.
 
 So for example, if I wanted a tape 
@@ -35,8 +35,8 @@ So for example, if I wanted a tape
 
 then I would set 
 ```
-tape_array = ["a", "bee", "c", "d", "2", "1"]
-cur_pos = 3
+TAPE_ARRAY = ["a", "bee", "c", "d", "2", "1"]
+CUR_POS = 3
 ```
 
 Note that this custom tape doesn't care about the symbol_dict at all, like why should it

@@ -1,4 +1,4 @@
-sym_dict = {
+SYMBOL_DICT = {
     0: " ",
     1: "0",
     2: "1"
@@ -11,5 +11,5 @@ default_dict = {
     2: "1"
 }
 
-tape_array = []
-cur_pos = 0
+TAPE_ARRAY = []
+CUR_POS = 0
