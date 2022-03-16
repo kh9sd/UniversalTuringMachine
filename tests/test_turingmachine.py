@@ -66,6 +66,17 @@ def test_master_process(example_infinite_0_1_right_SD,
     assert master_process(example_infinite_0_1_right_SD) == example_infinite_0_1_right_mconfigs
     assert master_process(example_infinite_0_1_right_DN) == example_infinite_0_1_right_mconfigs
 
+    # no trailing semi/7
+    with pytest.raises(ValueError):
+        master_process("DADDCRDAA;DADCDCLDAA;DAADDCLDA;DAADCDCRDAAA")
+
+    with pytest.raises(ValueError):
+        master_process("3133253117311335311173111332253111173111133531")
+
+    # wrong type for DN
+    with pytest.raises(ValueError):
+        master_process(3133253117311335311173111332253111173111133531)
+
 
 def test_get_mconfigs(example_inf_0_1_right_TM, example_infinite_0_1_right_mconfigs):
     assert example_inf_0_1_right_TM.get_mconfigs() == """(1, \' \'): (\'q_1\', "\' \'", ("P\'0\'", \'R\'), \'q_2\')
@@ -93,45 +104,43 @@ def test_get_whole_state(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
 
 def test_do_move(example_2_state_2_sym_BB_SD, example_BB_mconfigs):
     a = TuringMachine(example_2_state_2_sym_BB_SD)
-    assert a == TuringMachine(example_2_state_2_sym_BB_SD, None, 0, None)
+    assert a == TuringMachine(example_2_state_2_sym_BB_SD, None, 0, 1)
+
     a.do_move()
     assert a == TuringMachine(example_2_state_2_sym_BB_SD,
                               Tape(["0", " "], 1),
                               1,
-                              example_BB_mconfigs[(2, " ")])
+                              2)
     a.do_move()
     assert a == TuringMachine(example_2_state_2_sym_BB_SD,
                               Tape(["0", "0"], 0),
                               2,
-                              example_BB_mconfigs[(1, "0")])
+                              1)
     a.do_move()
     assert a == TuringMachine(example_2_state_2_sym_BB_SD,
                               Tape([" ", "0", "0"], 0),
                               3,
-                              example_BB_mconfigs[(2, " ")])
+                              2)
     a.do_move()
     assert a == TuringMachine(example_2_state_2_sym_BB_SD,
                               Tape([" ", "0", "0", "0"], 0),
                               4,
-                              example_BB_mconfigs[(1, " ")])
+                              1)
     a.do_move()
     assert a == TuringMachine(example_2_state_2_sym_BB_SD,
                               Tape(["0", "0", "0", "0"], 1),
                               5,
-                              example_BB_mconfigs[(2, "0")])
+                              2)
 
     a.do_move()
-    halted = TuringMachine(example_2_state_2_sym_BB_SD,
-                           Tape(["0", "0", "0", "0"], 2),
-                           6,
-                           None)
-
-    halted.cur_mcon = None
-    assert a == halted
+    assert a == TuringMachine(example_2_state_2_sym_BB_SD,
+                              Tape(["0", "0", "0", "0"], 2),
+                              6,
+                              3)
 
     with pytest.raises(HaltedException):
         a.do_move()
 
-    b = TuringMachine(example_2_state_2_sym_BB_SD, Tape(["0", "0"], 0))
+    b = TuringMachine(example_2_state_2_sym_BB_SD, Tape(["1", "0"], 0))
     with pytest.raises(HaltedException):
         b.do_move()

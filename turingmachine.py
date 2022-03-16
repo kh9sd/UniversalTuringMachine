@@ -81,23 +81,20 @@ def master_process(in_sd):
         else:
             return process_standard_des(in_sd)
     else:
-        raise TypeError("Input is not a str for DN or SD processing")
+        raise ValueError("Input is not a str for DN or SD processing")
 
 
 class TuringMachine:
-    def __init__(self, mconfigs, tp=None, moves=0, c_mcon=None):
+    def __init__(self, mconfigs, tp=None, moves=0, c_mcon=1):
         self.mcons = master_process(mconfigs)
 
         if not tp:
             self.tape = Tape(config.tape_array, config.cur_pos)
         else:
             self.tape = tp
-        self.moves = moves
+        self.moves: int = moves
 
-        if not c_mcon:
-            self.cur_mcon = self.mcons[(1, config.sym_dict[0])]
-        else:
-            self.cur_mcon = c_mcon
+        self.cur_mcon: int = c_mcon
 
     def get_mconfigs(self):
         """
@@ -123,10 +120,7 @@ class TuringMachine:
 
         returns String
         """
-        if self.cur_mcon:
-            return f"Move {self.moves} on m-config: {self.cur_mcon.name}\n{self.tape}\n"
-        else:
-            return f"Move {self.moves} on m-config: {self.cur_mcon}\n{self.tape}\n"
+        return f"Move {self.moves} on m-config: {self.cur_mcon}\n{self.tape}\n"
 
     def do_move(self):
         """
@@ -134,17 +128,19 @@ class TuringMachine:
         doesn't return anything, just runs the whole apply mcon and switches mcons
         will throw exceptions to catch if the TM halts at any point
         """
-        if not self.cur_mcon or not self.tape.square_check(self.cur_mcon.symbol):
-            raise HaltedException(f"This TM has halted after {self.moves} moves!")
+        try:
+            mcon = self.mcons[(self.cur_mcon, self.tape.get_symbol())]
+        except KeyError:
+            raise HaltedException(f"This TM has halted after {self.moves} moves with no match for m-config "
+                                  f"{self.cur_mcon} at symbol \"{self.tape.get_symbol()}\"!")
 
-        print_sym, move_com = self.cur_mcon.operation
+        print_sym, move_com = mcon.operation
 
         self.tape.set_symbol(print_sym)
         self.tape.move(move_com)
         self.moves += 1
 
-        self.cur_mcon = self.mcons.get((self.cur_mcon.next, self.tape.get_symbol()),
-                                       None)
+        self.cur_mcon = mcon.next
 
     def __eq__(self, other):
         if not isinstance(other, TuringMachine):
