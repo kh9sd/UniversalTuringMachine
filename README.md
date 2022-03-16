@@ -41,8 +41,8 @@ CUR_POS = 3
 
 Note that this custom tape doesn't care about the symbol_dict at all, like why should it
 
-`turingrunner.py` is what you'll be using to actually run the UTM.
-Once it starts, it will read everything from the config.py,
+`main.py` is what you'll be using to actually run the UTM.
+Once it starts, it will read everything from the `config.py`,
 and ask you for your Standard Description or Description Number to run.
 
 
@@ -73,7 +73,7 @@ The transitions are encoded by giving the state, input symbol, symbol to write o
 
 Finally, to separate the m-configs we just have semicolons after each one
 
-An example of a TM that alternates printing 1 and 0 forever is *DADDCCRDAA;DAADDCRDA;* in this format
+An example of a TM that alternates printing 1 and 0 forever is `DADDCCRDAA;DAADDCRDA;` in this format
 
 ## Description Numbers
 Technically speaking, DNs aren't very different or any more useful compared to SDs, 
