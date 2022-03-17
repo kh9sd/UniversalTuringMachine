@@ -90,7 +90,7 @@ To convert from a SD to a DN, we simply replace each letter with a number in thi
 
 So every Turing Machine can be represented by a natural number!
 
-##Examples of SDs and DNs
+## Examples of SDs and DNs
 Here are a few to use and try:
 
 `DADDCRDAA;DAADDRDAAA;DAAADDCCRDAAAA;DAAAADDRDA;` prints 0 and 1 to the right forever
