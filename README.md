@@ -18,7 +18,7 @@ SYMBOL_DICT = {
 ```
 So the 0th symbol is a space, the 1st symbol is a 0, and the 2nd symbol is a 1.
 If you want to change this mapping, go ahead but remember these key things:
-1. Don't change the name *sym_dict* or any of the syntax braces, colons, etc
+1. Don't change the name `SYMBOL_DICT` or any of the syntax braces, colons, etc
 2. The values on the lefthand side must be plain integers
 3. The values on the righthand side must be surrounded by quotes
 
@@ -39,7 +39,7 @@ TAPE_ARRAY = ["a", "bee", "c", "d", "2", "1"]
 CUR_POS = 3
 ```
 
-Note that this custom tape doesn't care about the symbol_dict at all, like why should it
+Note that this custom tape doesn't care about the `SYMBOL_DICT` at all, like why should it
 
 `main.py` is what you'll be using to actually run the UTM.
 Once it starts, it will read everything from the `config.py`,
