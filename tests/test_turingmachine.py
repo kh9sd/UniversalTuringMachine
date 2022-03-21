@@ -86,19 +86,19 @@ def test_get_mconfigs(example_inf_0_1_right_TM, example_infinite_0_1_right_mconf
 
 
 def test_get_tape(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
-    assert example_inf_0_1_right_TM.get_tape() == "\033[4m" + "[ ]" + "\033[0m"
-    assert example_inf_0_1_TM_starter.get_tape() == "[among][us]" + "\033[4m" + "[ ]" + "\033[0m"
+    assert example_inf_0_1_right_TM.get_tape() == "...]<<[ ]>>[..."
+    assert example_inf_0_1_TM_starter.get_tape() == "...][among][us]<<[ ]>>[..."
 
 
 def test_get_whole_state(example_inf_0_1_right_TM, example_inf_0_1_TM_starter):
     assert example_inf_0_1_right_TM.get_whole_state() == \
            """After move 0 on m-config: 1
-\033[4m[ ]\033[0m
+...]<<[ ]>>[...
 """
 
     assert example_inf_0_1_TM_starter.get_whole_state() == \
            """After move 2 on m-config: 1
-[among][us]\033[4m[ ]\033[0m
+...][among][us]<<[ ]>>[...
 """
 
 

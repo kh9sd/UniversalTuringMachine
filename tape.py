@@ -182,11 +182,13 @@ class Tape:
         right_str = "".join(to_right)
         left_str = "".join(to_left[::-1])
 
-        return (left_str +
-                "\033[4m" +
-                f"[{self.current.data}]" +
-                "\033[0m" +
-                right_str)
+        # return (left_str +
+        #         "\033[4m" +
+        #         f"[{self.current.data}]" +
+        #         "\033[0m" +
+        #         right_str)
+
+        return "...]" + left_str + f"<<[{self.current.data}]>>" + right_str + "[..."
 
     def __eq__(self, other):
         if not isinstance(other, Tape):
