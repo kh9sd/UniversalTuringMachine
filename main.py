@@ -24,16 +24,14 @@ if __name__ == "__main__":
 
     try:
         tm = TuringMachine(input_sd)
-    except ValueError as e:  # first line throws error
-        print("\nInvalid input for TM:\n", e)
-        quit()
 
-    try:
         while True:
             print(tm.get_whole_state())
             tm.do_move()
             time.sleep(0.75)
+    except ValueError as e:  # first line throws error
+        print("\nInvalid input for TM:\n", e)
+        quit()
+
     except HaltedException as e:
         print(e)
-
-
