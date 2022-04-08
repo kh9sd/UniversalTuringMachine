@@ -4,6 +4,7 @@ if "pytest" in sys.modules:
 else:
     import config
 from constants import *
+from itertools import pairwise
 
 
 class TapeSquare:
@@ -51,6 +52,9 @@ class Tape:
 
         current: TapeSquare
             holds the current TapeSquare the TM is processing
+
+        Fields:
+            current: TapeSquare on the tape
         """
 
         if not lst:
@@ -60,17 +64,14 @@ class Tape:
         if pos not in range(0, len(lst)):
             raise ValueError("Position is out of bounds of list (index starts at 0)")
 
-        cur_sqr = sentinel_head = TapeSquare()
+        tape_lst = [TapeSquare(val) for val in lst]
 
-        for item in lst:
-            cur_sqr.next = TapeSquare(item, prev=cur_sqr)
-            cur_sqr = cur_sqr.next
+        for back, front in pairwise(tape_lst):
+            back.next = front
+            front.prev = back
 
-        for i in range((len(lst) - 1) - pos):
-            cur_sqr = cur_sqr.prev
+        self.current = tape_lst[pos]
 
-        sentinel_head.next.prev = None
-        self.current = cur_sqr
 
     def get_symbol(self):
         """
