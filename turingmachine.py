@@ -4,10 +4,8 @@ if "pytest" in sys.modules:
 else:
     import config
 from constants import *
-import mconfig
-import tape
-MConfig = mconfig.MConfig
-Tape = tape.Tape
+from mconfig import MConfig
+from tape import Tape
 
 
 def process_description_num(dn):
